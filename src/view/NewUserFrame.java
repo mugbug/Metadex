@@ -57,6 +57,7 @@ public class NewUserFrame {
 		NewUserFrame.setTitle("Metadex");
 		NewUserFrame.getContentPane().setBackground(Color.WHITE);
 		NewUserFrame.getContentPane().setLayout(null);
+		NewUserFrame.setLocationRelativeTo(null);
 		
 		textField = new JTextField();
 		textField.setFont(new Font("Nirmala UI", Font.PLAIN, 11));

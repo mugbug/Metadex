@@ -22,6 +22,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.UIManager;
 import java.awt.Rectangle;
 import javax.swing.SwingConstants;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class LoginFrame {
 
@@ -67,6 +69,7 @@ public class LoginFrame {
 		LoginFrame.setBounds(100, 100, 280, 350);
 		LoginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		LoginFrame.getContentPane().setLayout(null);
+		LoginFrame.setLocationRelativeTo(null);
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.setContentAreaFilled(false);
@@ -111,6 +114,7 @@ public class LoginFrame {
 		btnEntrar.setBorder(null);
 		btnEntrar.setBounds(41, 221, 199, 31);
 		LoginFrame.getContentPane().add(btnEntrar);
+		
 		btnEntrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				User user = new User(txtEmail.getText(), passwordField.getText());
