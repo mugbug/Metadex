@@ -8,6 +8,7 @@ public class Runner {
 		try{
 			LoginFrame window = new LoginFrame();
 			System.out.println("Teste");
+			System.out.println("Teste");
 			window.LoginFrame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
