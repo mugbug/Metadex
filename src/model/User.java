@@ -1,6 +1,9 @@
 package model;
 
+
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
 
 public class User {
 	private String name;
@@ -9,6 +12,7 @@ public class User {
 	private String password;
 	private BufferedImage image;
 	private int level = 2; //1-normal user/2-admin
+	private ArrayList<Integer> contributedIn = new ArrayList<>();
 	
 	public User(String name, String email, String password, BufferedImage image, int level) {
 		this.name = name;
@@ -51,7 +55,7 @@ public class User {
 		return level;
 	}
 	public void setLevel(int level) {
-		this.level = level;
+		this.level = level; //1 ou 2
 	}
 	public BufferedImage getImage() {
 		return image;
@@ -61,8 +65,14 @@ public class User {
 	}
 	
 	/*-------  Metodos  -----*/
-	/*----- Gerenciar MH ----*/
-	/*--  Gerenciar Perfil --*/
+	
+	public void addContribution(int id){
+		this.contributedIn.add(id);
+	}
+	
+	public void getContributions(){
+		//idk
+	}
 	
 	@Override
 	public int hashCode() {

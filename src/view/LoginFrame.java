@@ -13,6 +13,7 @@ import java.awt.Color;
 import javax.swing.JPasswordField;
 import javax.swing.JRootPane;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JTextField;
 
 import model.User;
@@ -146,8 +147,14 @@ public class LoginFrame {
 					}
 				}
 				else{
-					String message = "Email ou senha inválidos!";
-					JOptionPane.showMessageDialog(LoginFrame, message, "Erro", JOptionPane.ERROR_MESSAGE);
+					try {
+						String message = "Email ou senha inválidos!";
+						NotificationDialog dialog = new NotificationDialog(3, message);
+						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		});

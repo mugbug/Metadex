@@ -1,8 +1,7 @@
 package model;
 
-public class Hability {
+public class Ability {
 	private String name;
-	private String element;
 	private String description;
 	
 	public String getName() {
@@ -10,12 +9,6 @@ public class Hability {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public String getElement() {
-		return element;
-	}
-	public void setElement(String element) {
-		this.element = element;
 	}
 	public String getDescription() {
 		return description;

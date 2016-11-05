@@ -10,7 +10,11 @@ import java.awt.Font;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.swing.JToggleButton;
 import java.awt.Toolkit;
@@ -83,11 +87,25 @@ public class NewUserFrame {
 		NewUserFrame.getContentPane().add(textField_3);
 		textField_3.setColumns(10);
 		
+		
+		
 		JButton btnFoto = new JButton("Foto");
 		btnFoto.setForeground(Color.DARK_GRAY);
 		btnFoto.setBackground(Color.LIGHT_GRAY);
 		btnFoto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fc = new JFileChooser();
+				fc.setCurrentDirectory(new File(System.getProperty("user.home")));
+				//Handle open button action.
+			    if (arg0.getSource() == btnFoto) {
+			        int returnVal = fc.showOpenDialog(btnFoto);
+
+			        if (returnVal == JFileChooser.APPROVE_OPTION) {
+			            File file = fc.getSelectedFile();
+			            //This is where a real application would open the file.
+			            btnFoto.setText("Foto: OK");
+			        }
+			   }
 			}
 		});
 		btnFoto.setBounds(39, 356, 225, 28);

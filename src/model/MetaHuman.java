@@ -7,16 +7,16 @@ public class MetaHuman {
 	private int id;
 	private int age;
 	private BufferedImage image;
-	private Hability hability;
+	private Ability ability;
 	private City homeTown;
 	private String history;
 	
 	
-	public MetaHuman(String name, int age, BufferedImage image, Hability hability, City homeTown, String history) {
+	public MetaHuman(String name, int age, BufferedImage image, Ability ability, City homeTown, String history) {
 		this.name = name;
 		this.age = age;
 		this.image = image;
-		this.hability = hability;
+		this.ability = ability;
 		this.homeTown = homeTown;
 		this.history = history;
 	}
@@ -39,11 +39,11 @@ public class MetaHuman {
 	public void setAge(int age) {
 		this.age = age;
 	}
-	public Hability getHability() {
-		return hability;
+	public Ability getHability() {
+		return ability;
 	}
-	public void setHability(Hability hability) {
-		this.hability = hability;
+	public void setHability(Ability ability) {
+		this.ability = ability;
 	}
 	public City getHomeTown() {
 		return homeTown;

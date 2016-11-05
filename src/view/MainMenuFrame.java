@@ -152,6 +152,11 @@ public class MainMenuFrame extends PaneSwitcher{
 		menuArquivo.add(menuItemDeslogar);
 		
 		JMenuItem menuItemSair = new JMenuItem("Sair");
+		menuItemSair.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MainMenuFrame.dispose();
+			}
+		});
 		menuItemSair.setMnemonic(KeyEvent.VK_S);
 		menuItemSair.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		menuItemSair.setBorder(new EmptyBorder(2, 6, 2, 2));
