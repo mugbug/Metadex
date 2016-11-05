@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 import javax.swing.JPanel;
 import java.awt.Color;
 import javax.swing.JPasswordField;
+import javax.swing.JRootPane;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
@@ -24,6 +25,7 @@ import java.awt.Rectangle;
 import javax.swing.SwingConstants;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class LoginFrame {
 
@@ -113,7 +115,7 @@ public class LoginFrame {
 		JButton btnEntrar = new JButton("Entrar");
 		btnEntrar.setBorder(null);
 		btnEntrar.setBounds(41, 221, 199, 31);
-		LoginFrame.getContentPane().add(btnEntrar);
+		LoginFrame.getContentPane().add(btnEntrar);		
 		
 		btnEntrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -123,19 +125,28 @@ public class LoginFrame {
 					if(user.getLevel() == 2){
 						//menu admin
 						try {
-							AdminMenuFrame window = new AdminMenuFrame();
-							window.AdminMenuFrame.setVisible(true);
+							MainMenuFrame window = new MainMenuFrame();
+							window.MainMenuFrame.setTitle("Metadex (admin)");
+							window.MainMenuFrame.setVisible(true);
 							LoginFrame.dispose();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
-					else{
+					else if(user.getLevel() == 1){
 						//menu normal user
+						try {
+							MainMenuFrame window = new MainMenuFrame();
+							window.MainMenuFrame.setTitle("Metadex");
+							window.MainMenuFrame.setVisible(true);
+							LoginFrame.dispose();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 				else{
-					String message = "Invalid user or password!";
+					String message = "Email ou senha inválidos!";
 					JOptionPane.showMessageDialog(LoginFrame, message, "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -145,9 +156,16 @@ public class LoginFrame {
 		btnEntrar.setBackground(Color.LIGHT_GRAY);
 		btnEntrar.setFont(new Font("Nirmala UI", Font.PLAIN, 15));
 		
+		LoginFrame.getRootPane().setDefaultButton(btnEntrar);
+		
 		JLabel label = new JLabel("");
 		label.setBounds(-13, -2, 290, 327);
 		label.setIcon(new ImageIcon(LoginFrame.class.getResource("/view/img/login.jpg")));
 		LoginFrame.getContentPane().add(label);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 0, 274, 321);
+		LoginFrame.getContentPane().add(panel);
+		panel.setLayout(null);
 	}
 }

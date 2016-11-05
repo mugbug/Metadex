@@ -60,7 +60,7 @@ public class User {
 		this.image = image;
 	}
 	
-	/*-------  Metodos  ------*/
+	/*-------  Metodos  -----*/
 	/*----- Gerenciar MH ----*/
 	/*--  Gerenciar Perfil --*/
 	

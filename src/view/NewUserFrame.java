@@ -117,6 +117,8 @@ public class NewUserFrame {
 		btnSubmeter.setBounds(169, 406, 95, 29);
 		NewUserFrame.getContentPane().add(btnSubmeter);
 		
+		NewUserFrame.getRootPane().setDefaultButton(btnSubmeter);
+		
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon(NewUserFrame.class.getResource("/view/img/new_user.jpg")));
 		label.setBounds(0, 0, 300, 452);
