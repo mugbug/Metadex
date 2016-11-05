@@ -1,13 +1,10 @@
 package view;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
-import javax.swing.JToggleButton;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -15,37 +12,32 @@ import javax.swing.JOptionPane;
 
 import java.awt.Component;
 import java.awt.Font;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JButton;
-import javax.swing.JTabbedPane;
-import java.awt.ComponentOrientation;
 import javax.swing.JComboBox;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.CardLayout;
 import java.awt.Color;
-import javax.swing.UIManager;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.Toolkit;
-import javax.swing.border.LineBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.JEditorPane;
-import java.awt.TextField;
-import java.awt.TextArea;
 import java.awt.Panel;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.SwingConstants;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import controller.PaneSwitcher;
+
 import java.awt.event.KeyEvent;
 
-public class MainMenuFrame {
+public class MainMenuFrame extends PaneSwitcher{
 
 	public JFrame MainMenuFrame;
 	private JTextField textFieldRegister;
@@ -60,6 +52,11 @@ public class MainMenuFrame {
 	private JTextField textFieldNomeEditCity;
 	private JTextField textFieldPaisEditCity;
 	private JTextField textFieldNomeEditAbility;
+	private JTextField textFieldNomeProfile;
+	private JTextField textFieldEmailProfile;
+	private JTextField textFieldSenhaAtualProfile;
+	private JTextField textFieldNovaSenhaProfile_1;
+	private JTextField textFieldNovaSenhaProfile_2;
 
 	/**
 	 * Launch the application.
@@ -103,12 +100,17 @@ public class MainMenuFrame {
 		ButtonGroup buttonGroup = new ButtonGroup();
 		MainMenuFrame.getContentPane().setLayout(null);
 		
+		JPanel contentPane = new JPanel();
+		contentPane.setBounds(0, 30, 598, 375);
+		MainMenuFrame.getContentPane().add(contentPane);
+		contentPane.setLayout(new CardLayout(0, 0));
+		
 		//menuBar start
 		
-		JPanel panelMenuBar = new JPanel();
-		panelMenuBar.setBounds(0, 0, 598, 30);
-		MainMenuFrame.getContentPane().add(panelMenuBar);
-		panelMenuBar.setLayout(null);
+		JPanel menuBarPane = new JPanel();
+		menuBarPane.setBounds(0, 0, 598, 30);
+		MainMenuFrame.getContentPane().add(menuBarPane);
+		menuBarPane.setLayout(null);
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
@@ -116,7 +118,7 @@ public class MainMenuFrame {
 		menuBar.setBackground(Color.WHITE);
 		menuBar.setAlignmentY(0.5f);
 		menuBar.setBounds(0, 0, 602, 29);
-		panelMenuBar.add(menuBar);
+		menuBarPane.add(menuBar);
 		
 		JMenu menuArquivo = new JMenu("Arquivo");
 		menuArquivo.setMnemonic(KeyEvent.VK_A);
@@ -131,6 +133,18 @@ public class MainMenuFrame {
 				MainMenuFrame.dispose();
 			}
 		});
+		
+		JMenuItem menuItemGerenciar = new JMenuItem("Gerenciar Usu\u00E1rios");
+		menuItemGerenciar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showViewUsers(contentPane);
+			}
+		});
+		menuItemGerenciar.setMnemonic(KeyEvent.VK_G);
+		menuItemGerenciar.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		menuItemGerenciar.setBorder(new EmptyBorder(2, 6, 2, 2));
+		menuItemGerenciar.setBackground(Color.WHITE);
+		menuArquivo.add(menuItemGerenciar);
 		menuItemDeslogar.setMnemonic(KeyEvent.VK_D);
 		menuItemDeslogar.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		menuItemDeslogar.setBorder(new EmptyBorder(2, 6, 2, 2));
@@ -144,47 +158,34 @@ public class MainMenuFrame {
 		menuItemSair.setBackground(Color.WHITE);
 		menuArquivo.add(menuItemSair);
 		
-		JMenu menuGerenciar = new JMenu("Gerenciar usu\u00E1rios");
-		menuGerenciar.setMnemonic(KeyEvent.VK_G);
-		menuGerenciar.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
-		menuBar.add(menuGerenciar);
-		
 		JMenu menuPerfil = new JMenu("Perfil");
 		menuPerfil.setMnemonic(KeyEvent.VK_P);
 		menuPerfil.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		menuPerfil.setAlignmentX(1.0f);
 		menuBar.add(menuPerfil);
 		
-		JMenuItem menuItemEditar = new JMenuItem("Editar perfil");
+		JMenuItem menuItemEditar = new JMenuItem("Editar Perfil");
+		menuItemEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				showProfile(contentPane);
+			}
+		});
 		menuItemEditar.setMnemonic(KeyEvent.VK_E);
 		menuItemEditar.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		menuItemEditar.setBorder(new EmptyBorder(2, 6, 2, 2));
 		menuItemEditar.setBackground(Color.WHITE);
 		menuPerfil.add(menuItemEditar);
 		
-		JMenuItem menuItemAlterar = new JMenuItem("Alterar senha");
-		menuItemAlterar.setMnemonic(KeyEvent.VK_A);
-		menuItemAlterar.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
-		menuItemAlterar.setBorder(new EmptyBorder(2, 6, 2, 2));
-		menuItemAlterar.setBackground(Color.WHITE);
-		menuPerfil.add(menuItemAlterar);
-		
 		//menuBar end
 		
-		
-		JPanel panelContent = new JPanel();
-		panelContent.setBounds(0, 30, 598, 375);
-		MainMenuFrame.getContentPane().add(panelContent);
-		panelContent.setLayout(new CardLayout(0, 0));
-		
-		JPanel panelMainMenu = new JPanel();
-		panelContent.add(panelMainMenu, "MainMenu");
-		panelMainMenu.setLayout(null);
+		JPanel mainMenuPane = new JPanel();
+		contentPane.add(mainMenuPane, "MainMenu");
+		mainMenuPane.setLayout(null);
 		
 		JRadioButton radioButtonMH = new JRadioButton("Meta-humano");
 		radioButtonMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		radioButtonMH.setBounds(211, 177, 103, 21);
-		panelMainMenu.add(radioButtonMH);
+		mainMenuPane.add(radioButtonMH);
 		radioButtonMH.setAlignmentX(Component.CENTER_ALIGNMENT);
 		radioButtonMH.setOpaque(false);
 		radioButtonMH.setSelected(true);
@@ -192,7 +193,7 @@ public class MainMenuFrame {
 		JRadioButton radioButtonC = new JRadioButton("Cidade");
 		radioButtonC.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		radioButtonC.setBounds(359, 177, 63, 21);
-		panelMainMenu.add(radioButtonC);
+		mainMenuPane.add(radioButtonC);
 		radioButtonC.setAlignmentX(Component.CENTER_ALIGNMENT);
 		radioButtonC.setOpaque(false);
 		
@@ -201,14 +202,14 @@ public class MainMenuFrame {
 		radioButtonH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		radioButtonH.setAlignmentX(0.5f);
 		radioButtonH.setBounds(467, 177, 83, 21);
-		panelMainMenu.add(radioButtonH);
+		mainMenuPane.add(radioButtonH);
 		buttonGroup.add(radioButtonMH);
 		buttonGroup.add(radioButtonC);
 		buttonGroup.add(radioButtonH);
 		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBounds(318, 256, 238, 33);
-		panelMainMenu.add(comboBox);
+		mainMenuPane.add(comboBox);
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"<lista de meta-humanos>", "ou", "<lista de cidades>"}));
 		comboBox.setBackground(Color.WHITE);
 		comboBox.setBorder(null);
@@ -218,16 +219,13 @@ public class MainMenuFrame {
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(radioButtonMH.isSelected()){
-					CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-					cardLayout.show(panelContent, "EditMH");
+					showEditMH(contentPane);
 				}
 				else if(radioButtonC.isSelected()){
-					CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-					cardLayout.show(panelContent, "EditCity");
+					showEditCity(contentPane);
 				}
 				else if(radioButtonH.isSelected()){
-					CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-					cardLayout.show(panelContent, "EditAbility");
+					showEditAbility(contentPane);
 				}
 				else {
 					String message = "Selecione um tipo!";
@@ -236,7 +234,7 @@ public class MainMenuFrame {
 			}
 		});
 		btnEdit.setBounds(318, 300, 110, 33);
-		panelMainMenu.add(btnEdit);
+		mainMenuPane.add(btnEdit);
 		btnEdit.setBackground(Color.WHITE);
 		btnEdit.setBorder(null);
 		btnEdit.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
@@ -245,16 +243,13 @@ public class MainMenuFrame {
 		btnView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(radioButtonMH.isSelected()){
-					CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-					cardLayout.show(panelContent, "ViewMH");
+					showViewMH(contentPane);
 				}
 				else if(radioButtonC.isSelected()){
-					CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-					cardLayout.show(panelContent, "ViewCity");
+					showViewCity(contentPane);
 				}
 				else if(radioButtonH.isSelected()){
-					CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-					cardLayout.show(panelContent, "ViewAbility");
+					showViewAbility(contentPane);
 				}
 				else {
 					String message = "Selecione um tipo!";
@@ -263,7 +258,7 @@ public class MainMenuFrame {
 			}
 		});
 		btnView.setBounds(446, 300, 110, 33);
-		panelMainMenu.add(btnView);
+		mainMenuPane.add(btnView);
 		btnView.setBackground(Color.WHITE);
 		btnView.setBorder(null);
 		btnView.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
@@ -273,25 +268,22 @@ public class MainMenuFrame {
 		textFieldRegister.setBackground(Color.WHITE);
 		textFieldRegister.setSelectionColor(new Color(255, 255, 102));
 		textFieldRegister.setBounds(40, 257, 238, 33);
-		panelMainMenu.add(textFieldRegister);
+		mainMenuPane.add(textFieldRegister);
 		textFieldRegister.setColumns(10);
 		
 		JButton btnRegister = new JButton("Cadastrar");
 		btnRegister.setBounds(170, 300, 110, 33);
-		panelMainMenu.add(btnRegister);
+		mainMenuPane.add(btnRegister);
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(radioButtonMH.isSelected()){
-					CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-					cardLayout.show(panelContent, "NewMH");
+					showNewMH(contentPane);
 				}
 				else if(radioButtonC.isSelected()){
-					CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-					cardLayout.show(panelContent, "NewCity");
+					showNewCity(contentPane);
 				}
 				else if(radioButtonH.isSelected()){
-					CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-					cardLayout.show(panelContent, "NewAbility");
+					showNewAbility(contentPane);
 				}
 				else {
 					String message = "Selecione um tipo!";
@@ -307,31 +299,31 @@ public class MainMenuFrame {
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setEnabled(false);
 		separator_1.setBounds(28, 219, 546, 2);
-		panelMainMenu.add(separator_1);
+		mainMenuPane.add(separator_1);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBorder(new EmptyBorder(1, 1, 1, 1));
 		separator.setName("Menu Principal");
 		separator.setBounds(30, 158, 546, 2);
-		panelMainMenu.add(separator);
+		mainMenuPane.add(separator);
 		
 		JLabel labelMainMenu = new JLabel("Menu Principal");
 		labelMainMenu.setFont(new Font("Nirmala UI", Font.PLAIN, 20));
 		labelMainMenu.setForeground(Color.GRAY);
 		labelMainMenu.setBounds(42, 121, 133, 28);
-		panelMainMenu.add(labelMainMenu);
+		mainMenuPane.add(labelMainMenu);
 		
 		JLabel labelMainMenu1 = new JLabel("Escolha um tipo:");
 		labelMainMenu1.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		labelMainMenu1.setForeground(Color.GRAY);
 		labelMainMenu1.setBounds(45, 177, 121, 21);
-		panelMainMenu.add(labelMainMenu1);
+		mainMenuPane.add(labelMainMenu1);
 		
 		JLabel labelMainMenu2 = new JLabel("Insira nome para cadastrar:");
 		labelMainMenu2.setForeground(Color.GRAY);
 		labelMainMenu2.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		labelMainMenu2.setBounds(47, 232, 145, 14);
-		panelMainMenu.add(labelMainMenu2);
+		mainMenuPane.add(labelMainMenu2);
 		
 		JLabel labelEditView = new JLabel("Escolha um Meta-Humano:");
 		
@@ -359,17 +351,17 @@ public class MainMenuFrame {
 		labelEditView.setForeground(Color.GRAY);
 		labelEditView.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		labelEditView.setBounds(329, 232, 227, 14);
-		panelMainMenu.add(labelEditView);
+		mainMenuPane.add(labelEditView);
 		
 		JLabel bgMainMenu = new JLabel("");
 		bgMainMenu.setBounds(0, 0, 602, 370);
-		panelMainMenu.add(bgMainMenu);
+		mainMenuPane.add(bgMainMenu);
 		bgMainMenu.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/bg-base.jpg")));
 
-		JPanel panelNewMH = new JPanel();
-		panelContent.add(panelNewMH, "NewMH");
-		panelNewMH.setBackground(Color.WHITE);
-		panelNewMH.setLayout(null);
+		JPanel newMHPane = new JPanel();
+		contentPane.add(newMHPane, "NewMH");
+		newMHPane.setBackground(Color.WHITE);
+		newMHPane.setLayout(null);
 		
 		JButton btnBackNewMH = new JButton("");
 		btnBackNewMH.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/arrow-leftpressed.png")));
@@ -377,26 +369,26 @@ public class MainMenuFrame {
 		btnBackNewMH.setBorderPainted(false);
 		btnBackNewMH.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/arrow-left-edited1.png")));
 		btnBackNewMH.setBounds(0, 0, 32, 32);
-		panelNewMH.add(btnBackNewMH);
+		newMHPane.add(btnBackNewMH);
 		
 		JButton btnRegisterNewMH = new JButton("Cadastrar");
 		btnRegisterNewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		btnRegisterNewMH.setBorder(null);
 		btnRegisterNewMH.setBackground(Color.WHITE);
 		btnRegisterNewMH.setBounds(444, 296, 110, 33);
-		panelNewMH.add(btnRegisterNewMH);
+		newMHPane.add(btnRegisterNewMH);
 		
 		JLabel lblNovoMetahumano = new JLabel("Novo Meta-Humano");
 		lblNovoMetahumano.setForeground(Color.GRAY);
 		lblNovoMetahumano.setFont(new Font("Nirmala UI", Font.PLAIN, 20));
 		lblNovoMetahumano.setBounds(42, 121, 187, 28);
-		panelNewMH.add(lblNovoMetahumano);
+		newMHPane.add(lblNovoMetahumano);
 		
 		JSeparator separator_2 = new JSeparator();
 		separator_2.setName("Menu Principal");
 		separator_2.setBorder(new EmptyBorder(1, 1, 1, 1));
 		separator_2.setBounds(30, 158, 546, 2);
-		panelNewMH.add(separator_2);
+		newMHPane.add(separator_2);
 		
 		textFieldNomeNewMH = new JTextField();
 		textFieldNomeNewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
@@ -404,44 +396,44 @@ public class MainMenuFrame {
 		textFieldNomeNewMH.setColumns(10);
 		textFieldNomeNewMH.setBackground(Color.WHITE);
 		textFieldNomeNewMH.setBounds(119, 172, 152, 21);
-		panelNewMH.add(textFieldNomeNewMH);
+		newMHPane.add(textFieldNomeNewMH);
 		
 		JLabel lblNome = new JLabel("Nome:");
 		lblNome.setForeground(Color.GRAY);
 		lblNome.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		lblNome.setBounds(58, 172, 34, 21);
-		panelNewMH.add(lblNome);
+		newMHPane.add(lblNome);
 		
 		JLabel lblIdade = new JLabel("Idade:");
 		lblIdade.setForeground(Color.GRAY);
 		lblIdade.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		lblIdade.setBounds(60, 197, 32, 21);
-		panelNewMH.add(lblIdade);
+		newMHPane.add(lblIdade);
 		
 		JLabel lblHabilidade = new JLabel("Habilidade:");
 		lblHabilidade.setForeground(Color.GRAY);
 		lblHabilidade.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		lblHabilidade.setBounds(328, 198, 59, 21);
-		panelNewMH.add(lblHabilidade);
+		newMHPane.add(lblHabilidade);
 		
 		JLabel lblPrimeiraApario = new JLabel("Primeira apari\u00E7\u00E3o:");
 		lblPrimeiraApario.setForeground(Color.GRAY);
 		lblPrimeiraApario.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		lblPrimeiraApario.setBounds(296, 173, 91, 21);
-		panelNewMH.add(lblPrimeiraApario);
+		newMHPane.add(lblPrimeiraApario);
 		
 		JLabel lblHistria = new JLabel("Hist\u00F3ria:");
 		lblHistria.setForeground(Color.GRAY);
 		lblHistria.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		lblHistria.setBounds(49, 225, 43, 21);
-		panelNewMH.add(lblHistria);
+		newMHPane.add(lblHistria);
 		
 		JButton btnFoto = new JButton("Foto");
 		btnFoto.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		btnFoto.setBorder(null);
 		btnFoto.setBackground(Color.WHITE);
 		btnFoto.setBounds(444, 253, 110, 33);
-		panelNewMH.add(btnFoto);
+		newMHPane.add(btnFoto);
 		
 		textFieldIdadeNewMH = new JTextField();
 		textFieldIdadeNewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
@@ -449,35 +441,35 @@ public class MainMenuFrame {
 		textFieldIdadeNewMH.setColumns(10);
 		textFieldIdadeNewMH.setBackground(Color.WHITE);
 		textFieldIdadeNewMH.setBounds(119, 198, 152, 21);
-		panelNewMH.add(textFieldIdadeNewMH);
+		newMHPane.add(textFieldIdadeNewMH);
 		
 		JEditorPane editorPaneHistoriaNewMH = new JEditorPane();
 		editorPaneHistoriaNewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		editorPaneHistoriaNewMH.setBounds(44, 253, 390, 75);
-		panelNewMH.add(editorPaneHistoriaNewMH);
+		newMHPane.add(editorPaneHistoriaNewMH);
 		
 		JComboBox comboBoxCidadeNewMH = new JComboBox();
 		comboBoxCidadeNewMH.setBackground(Color.WHITE);
 		comboBoxCidadeNewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		comboBoxCidadeNewMH.setBounds(402, 171, 152, 21);
-		panelNewMH.add(comboBoxCidadeNewMH);
+		newMHPane.add(comboBoxCidadeNewMH);
 		
 		JComboBox comboBoxHabilidadeNewMH = new JComboBox();
 		comboBoxHabilidadeNewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		comboBoxHabilidadeNewMH.setBackground(Color.WHITE);
 		comboBoxHabilidadeNewMH.setBounds(402, 198, 152, 21);
-		panelNewMH.add(comboBoxHabilidadeNewMH);
+		newMHPane.add(comboBoxHabilidadeNewMH);
 		
 		JLabel bgNewMH = new JLabel("");
 		bgNewMH.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/bg-base.jpg")));
 		bgNewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		bgNewMH.setBackground(Color.WHITE);
 		bgNewMH.setBounds(0, 0, 603, 370);
-		panelNewMH.add(bgNewMH);
+		newMHPane.add(bgNewMH);
 		
-		Panel panelNewCity = new Panel();
-		panelContent.add(panelNewCity, "NewCity");
-		panelNewCity.setLayout(null);
+		Panel newCityPane = new Panel();
+		contentPane.add(newCityPane, "NewCity");
+		newCityPane.setLayout(null);
 		
 		JButton btnBackNewCity = new JButton("");
 		
@@ -486,63 +478,63 @@ public class MainMenuFrame {
 		btnBackNewCity.setContentAreaFilled(false);
 		btnBackNewCity.setBorderPainted(false);
 		btnBackNewCity.setBounds(0, 0, 32, 32);
-		panelNewCity.add(btnBackNewCity);
+		newCityPane.add(btnBackNewCity);
 		
 		JButton btnRegisterNewCity = new JButton("Cadastrar");
 		btnRegisterNewCity.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		btnRegisterNewCity.setBorder(null);
 		btnRegisterNewCity.setBackground(Color.WHITE);
 		btnRegisterNewCity.setBounds(445, 296, 110, 33);
-		panelNewCity.add(btnRegisterNewCity);
+		newCityPane.add(btnRegisterNewCity);
 		
 		JLabel lblNovaCidade = new JLabel("Nova Cidade");
 		lblNovaCidade.setForeground(Color.GRAY);
 		lblNovaCidade.setFont(new Font("Nirmala UI", Font.PLAIN, 20));
 		lblNovaCidade.setBounds(42, 121, 187, 28);
-		panelNewCity.add(lblNovaCidade);
+		newCityPane.add(lblNovaCidade);
 		
 		JSeparator separator_3 = new JSeparator();
 		separator_3.setName("Menu Principal");
 		separator_3.setBorder(new EmptyBorder(1, 1, 1, 1));
 		separator_3.setBounds(30, 158, 546, 2);
-		panelNewCity.add(separator_3);
+		newCityPane.add(separator_3);
 		
 		JLabel label_2 = new JLabel("Nome:");
 		label_2.setForeground(Color.GRAY);
 		label_2.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		label_2.setBounds(154, 210, 34, 21);
-		panelNewCity.add(label_2);
+		newCityPane.add(label_2);
 		
 		JLabel lblPas = new JLabel("Pa\u00EDs:");
 		lblPas.setForeground(Color.GRAY);
 		lblPas.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		lblPas.setBounds(164, 242, 23, 21);
-		panelNewCity.add(lblPas);
+		newCityPane.add(lblPas);
 		
 		textFieldNomeNewCity = new JTextField();
 		textFieldNomeNewCity.setSelectionColor(new Color(255, 255, 102));
 		textFieldNomeNewCity.setColumns(10);
 		textFieldNomeNewCity.setBackground(Color.WHITE);
 		textFieldNomeNewCity.setBounds(198, 211, 237, 21);
-		panelNewCity.add(textFieldNomeNewCity);
+		newCityPane.add(textFieldNomeNewCity);
 		
 		textFieldPaisNewCity = new JTextField();
 		textFieldPaisNewCity.setSelectionColor(new Color(255, 255, 102));
 		textFieldPaisNewCity.setColumns(10);
 		textFieldPaisNewCity.setBackground(Color.WHITE);
 		textFieldPaisNewCity.setBounds(197, 243, 238, 21);
-		panelNewCity.add(textFieldPaisNewCity);
+		newCityPane.add(textFieldPaisNewCity);
 		
 		JLabel bgNewCity = new JLabel("");
 		bgNewCity.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/bg-base.jpg")));
 		bgNewCity.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		bgNewCity.setBackground(Color.WHITE);
 		bgNewCity.setBounds(0, 0, 603, 370);
-		panelNewCity.add(bgNewCity);
+		newCityPane.add(bgNewCity);
 		
-		Panel panelNewAbility = new Panel();
-		panelContent.add(panelNewAbility, "NewAbility");
-		panelNewAbility.setLayout(null);
+		Panel newAbilityPane = new Panel();
+		contentPane.add(newAbilityPane, "NewAbility");
+		newAbilityPane.setLayout(null);
 		
 		JButton btnBackNewAbility = new JButton("");
 		
@@ -551,86 +543,80 @@ public class MainMenuFrame {
 		btnBackNewAbility.setContentAreaFilled(false);
 		btnBackNewAbility.setBorderPainted(false);
 		btnBackNewAbility.setBounds(0, 0, 32, 32);
-		panelNewAbility.add(btnBackNewAbility);
+		newAbilityPane.add(btnBackNewAbility);
 		
 		JLabel lblNovaHabilidade = new JLabel("Nova Habilidade");
 		lblNovaHabilidade.setForeground(Color.GRAY);
 		lblNovaHabilidade.setFont(new Font("Nirmala UI", Font.PLAIN, 20));
 		lblNovaHabilidade.setBounds(42, 121, 187, 28);
-		panelNewAbility.add(lblNovaHabilidade);
+		newAbilityPane.add(lblNovaHabilidade);
 		
 		JSeparator separator_4 = new JSeparator();
 		separator_4.setName("Menu Principal");
 		separator_4.setBorder(new EmptyBorder(1, 1, 1, 1));
 		separator_4.setBounds(30, 158, 546, 2);
-		panelNewAbility.add(separator_4);
+		newAbilityPane.add(separator_4);
 		
 		JButton button_4 = new JButton("Cadastrar");
 		button_4.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		button_4.setBorder(null);
 		button_4.setBackground(Color.WHITE);
 		button_4.setBounds(445, 296, 110, 33);
-		panelNewAbility.add(button_4);
+		newAbilityPane.add(button_4);
 		
 		JLabel label_3 = new JLabel("Nome:");
 		label_3.setForeground(Color.GRAY);
 		label_3.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		label_3.setBounds(61, 195, 34, 21);
-		panelNewAbility.add(label_3);
+		newAbilityPane.add(label_3);
 		
 		textFieldNomeNewAbility = new JTextField();
 		textFieldNomeNewAbility.setSelectionColor(new Color(255, 255, 102));
 		textFieldNomeNewAbility.setColumns(10);
 		textFieldNomeNewAbility.setBackground(Color.WHITE);
 		textFieldNomeNewAbility.setBounds(105, 195, 330, 21);
-		panelNewAbility.add(textFieldNomeNewAbility);
+		newAbilityPane.add(textFieldNomeNewAbility);
 		
 		JLabel lblDescrio = new JLabel("Descri\u00E7\u00E3o:");
 		lblDescrio.setForeground(Color.GRAY);
 		lblDescrio.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		lblDescrio.setBounds(43, 227, 52, 21);
-		panelNewAbility.add(lblDescrio);
+		newAbilityPane.add(lblDescrio);
 		
 		JEditorPane editorPaneDescNewAbility = new JEditorPane();
 		editorPaneDescNewAbility.setBounds(105, 227, 330, 102);
-		panelNewAbility.add(editorPaneDescNewAbility);
+		newAbilityPane.add(editorPaneDescNewAbility);
 		
 		JLabel bgNewAbility = new JLabel("");
 		bgNewAbility.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/bg-base.jpg")));
 		bgNewAbility.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		bgNewAbility.setBackground(Color.WHITE);
 		bgNewAbility.setBounds(0, 0, 603, 370);
-		panelNewAbility.add(bgNewAbility);
+		newAbilityPane.add(bgNewAbility);
 		
-		JPanel panelViewMH = new JPanel();
-		panelContent.add(panelViewMH, "ViewMH");
-		panelViewMH.setLayout(null);
+		JPanel viewMHPane = new JPanel();
+		contentPane.add(viewMHPane, "ViewMH");
+		viewMHPane.setLayout(null);
 		
 		JButton btnBackViewMH = new JButton("");
-		btnBackViewMH.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-				cardLayout.show(panelContent, "MainMenu");
-			}
-		});
 		btnBackViewMH.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/arrow-leftpressed.png")));
 		btnBackViewMH.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/arrow-left-edited1.png")));
 		btnBackViewMH.setContentAreaFilled(false);
 		btnBackViewMH.setBorderPainted(false);
 		btnBackViewMH.setBounds(0, 0, 32, 32);
-		panelViewMH.add(btnBackViewMH);
+		viewMHPane.add(btnBackViewMH);
 		
 		JLabel lblNomeIdadeViewMH = new JLabel("<nome>, <idade>");
 		lblNomeIdadeViewMH.setForeground(Color.GRAY);
 		lblNomeIdadeViewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 20));
 		lblNomeIdadeViewMH.setBounds(42, 121, 392, 28);
-		panelViewMH.add(lblNomeIdadeViewMH);
+		viewMHPane.add(lblNomeIdadeViewMH);
 		
 		JSeparator separator_5 = new JSeparator();
 		separator_5.setName("Menu Principal");
 		separator_5.setBorder(new EmptyBorder(1, 1, 1, 1));
 		separator_5.setBounds(30, 158, 546, 2);
-		panelViewMH.add(separator_5);
+		viewMHPane.add(separator_5);
 		
 		JButton btnEditViewMH = new JButton("");
 		btnEditViewMH.setContentAreaFilled(false);
@@ -640,37 +626,37 @@ public class MainMenuFrame {
 		btnEditViewMH.setBorder(null);
 		btnEditViewMH.setBackground(Color.WHITE);
 		btnEditViewMH.setBounds(522, 118, 32, 32);
-		panelViewMH.add(btnEditViewMH);
+		viewMHPane.add(btnEditViewMH);
 		
 		JLabel label_7 = new JLabel("Habilidade:");
 		label_7.setForeground(Color.GRAY);
 		label_7.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		label_7.setBounds(245, 308, 59, 21);
-		panelViewMH.add(label_7);
+		viewMHPane.add(label_7);
 		
 		JLabel label_8 = new JLabel("Primeira apari\u00E7\u00E3o:");
 		label_8.setForeground(Color.GRAY);
 		label_8.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		label_8.setBounds(213, 283, 91, 21);
-		panelViewMH.add(label_8);
+		viewMHPane.add(label_8);
 		
 		JLabel label_9 = new JLabel("Hist\u00F3ria:");
 		label_9.setForeground(Color.GRAY);
 		label_9.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		label_9.setBounds(213, 171, 43, 21);
-		panelViewMH.add(label_9);
+		viewMHPane.add(label_9);
 		
 		JLabel lblCidadeViewMH = new JLabel("<cidade>");
 		lblCidadeViewMH.setForeground(Color.BLACK);
 		lblCidadeViewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		lblCidadeViewMH.setBounds(314, 283, 238, 21);
-		panelViewMH.add(lblCidadeViewMH);
+		viewMHPane.add(lblCidadeViewMH);
 		
 		JLabel lblHabilidadeViewMH = new JLabel("<habilidade>");
 		lblHabilidadeViewMH.setForeground(Color.BLACK);
 		lblHabilidadeViewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		lblHabilidadeViewMH.setBounds(314, 308, 240, 21);
-		panelViewMH.add(lblHabilidadeViewMH);
+		viewMHPane.add(lblHabilidadeViewMH);
 		
 		JLabel lblFoto = new JLabel("Foto 150x150");
 		lblFoto.setBackground(Color.DARK_GRAY);
@@ -679,7 +665,7 @@ public class MainMenuFrame {
 		lblFoto.setForeground(Color.WHITE);
 		lblFoto.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		lblFoto.setBounds(53, 178, 150, 150);
-		panelViewMH.add(lblFoto);
+		viewMHPane.add(lblFoto);
 		
 		JEditorPane editorPaneHistoriaViewMH = new JEditorPane();
 		editorPaneHistoriaViewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
@@ -687,19 +673,19 @@ public class MainMenuFrame {
 		editorPaneHistoriaViewMH.setEditable(false);
 		editorPaneHistoriaViewMH.setBackground(new Color(220, 220, 220));
 		editorPaneHistoriaViewMH.setBounds(213, 190, 341, 82);
-		panelViewMH.add(editorPaneHistoriaViewMH);
+		viewMHPane.add(editorPaneHistoriaViewMH);
 		
 		JLabel bgViewMH = new JLabel("");
 		bgViewMH.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/bg-base.jpg")));
 		bgViewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		bgViewMH.setBackground(Color.WHITE);
 		bgViewMH.setBounds(0, 0, 603, 370);
-		panelViewMH.add(bgViewMH);
+		viewMHPane.add(bgViewMH);
 		
-		JPanel panelViewCity = new JPanel();
-		panelContent.add(panelViewCity, "ViewCity");
-		panelViewCity.setBackground(Color.WHITE);
-		panelViewCity.setLayout(null);
+		JPanel viewCityPane = new JPanel();
+		contentPane.add(viewCityPane, "ViewCity");
+		viewCityPane.setBackground(Color.WHITE);
+		viewCityPane.setLayout(null);
 		
 		JButton btnBackViewCity = new JButton("");
 		btnBackViewCity.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/arrow-leftpressed.png")));
@@ -707,7 +693,7 @@ public class MainMenuFrame {
 		btnBackViewCity.setContentAreaFilled(false);
 		btnBackViewCity.setBorderPainted(false);
 		btnBackViewCity.setBounds(0, 0, 32, 32);
-		panelViewCity.add(btnBackViewCity);
+		viewCityPane.add(btnBackViewCity);
 		
 		JButton btnEditViewCity = new JButton("");
 		btnEditViewCity.setContentAreaFilled(false);
@@ -717,19 +703,19 @@ public class MainMenuFrame {
 		btnEditViewCity.setBorder(null);
 		btnEditViewCity.setBackground(Color.WHITE);
 		btnEditViewCity.setBounds(507, 117, 32, 32);
-		panelViewCity.add(btnEditViewCity);
+		viewCityPane.add(btnEditViewCity);
 		
 		JLabel lblNomePaisViewCity = new JLabel("<cidade>, <pa\u00EDs>");
 		lblNomePaisViewCity.setForeground(Color.GRAY);
 		lblNomePaisViewCity.setFont(new Font("Nirmala UI", Font.PLAIN, 20));
 		lblNomePaisViewCity.setBounds(42, 121, 187, 28);
-		panelViewCity.add(lblNomePaisViewCity);
+		viewCityPane.add(lblNomePaisViewCity);
 		
 		JSeparator separator_6 = new JSeparator();
 		separator_6.setName("Menu Principal");
 		separator_6.setBorder(new EmptyBorder(1, 1, 1, 1));
 		separator_6.setBounds(30, 158, 546, 2);
-		panelViewCity.add(separator_6);
+		viewCityPane.add(separator_6);
 		
 		tableViewCity = new JTable();
 		tableViewCity.setShowGrid(false);
@@ -756,18 +742,18 @@ public class MainMenuFrame {
 		tableViewCity.getColumnModel().getColumn(2).setPreferredWidth(148);
 		tableViewCity.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		tableViewCity.setBounds(63, 171, 476, 156);
-		panelViewCity.add(tableViewCity);
+		viewCityPane.add(tableViewCity);
 		
 		JLabel bgViewCity = new JLabel("");
 		bgViewCity.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/bg-base.jpg")));
 		bgViewCity.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		bgViewCity.setBackground(Color.WHITE);
 		bgViewCity.setBounds(0, 0, 603, 370);
-		panelViewCity.add(bgViewCity);
+		viewCityPane.add(bgViewCity);
 		
-		Panel panelViewAbility = new Panel();
-		panelContent.add(panelViewAbility, "ViewAbility");
-		panelViewAbility.setLayout(null);
+		Panel viewAbilityPane = new Panel();
+		contentPane.add(viewAbilityPane, "ViewAbility");
+		viewAbilityPane.setLayout(null);
 		
 		JButton btnBackViewAbility = new JButton("");
 		btnBackViewAbility.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/arrow-leftpressed.png")));
@@ -775,7 +761,7 @@ public class MainMenuFrame {
 		btnBackViewAbility.setContentAreaFilled(false);
 		btnBackViewAbility.setBorderPainted(false);
 		btnBackViewAbility.setBounds(0, 0, 32, 32);
-		panelViewAbility.add(btnBackViewAbility);
+		viewAbilityPane.add(btnBackViewAbility);
 		
 		JButton btnEditViewAbility = new JButton("");
 		btnEditViewAbility.setContentAreaFilled(false);
@@ -785,19 +771,19 @@ public class MainMenuFrame {
 		btnEditViewAbility.setBorder(null);
 		btnEditViewAbility.setBackground(Color.WHITE);
 		btnEditViewAbility.setBounds(527, 117, 32, 32);
-		panelViewAbility.add(btnEditViewAbility);
+		viewAbilityPane.add(btnEditViewAbility);
 		
 		JLabel lblNomeViewAbility = new JLabel("<habilidade>");
 		lblNomeViewAbility.setForeground(Color.GRAY);
 		lblNomeViewAbility.setFont(new Font("Nirmala UI", Font.PLAIN, 20));
 		lblNomeViewAbility.setBounds(42, 121, 187, 28);
-		panelViewAbility.add(lblNomeViewAbility);
+		viewAbilityPane.add(lblNomeViewAbility);
 		
 		JSeparator separator_7 = new JSeparator();
 		separator_7.setName("Menu Principal");
 		separator_7.setBorder(new EmptyBorder(1, 1, 1, 1));
 		separator_7.setBounds(30, 158, 546, 2);
-		panelViewAbility.add(separator_7);
+		viewAbilityPane.add(separator_7);
 		
 		JEditorPane editorPaneDescViewAbility = new JEditorPane();
 		editorPaneDescViewAbility.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
@@ -805,18 +791,18 @@ public class MainMenuFrame {
 		editorPaneDescViewAbility.setEditable(false);
 		editorPaneDescViewAbility.setBackground(new Color(220, 220, 220));
 		editorPaneDescViewAbility.setBounds(85, 195, 432, 120);
-		panelViewAbility.add(editorPaneDescViewAbility);
+		viewAbilityPane.add(editorPaneDescViewAbility);
 		
 		JLabel bgViewAbility = new JLabel("");
 		bgViewAbility.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/bg-base.jpg")));
 		bgViewAbility.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		bgViewAbility.setBackground(Color.WHITE);
 		bgViewAbility.setBounds(0, 0, 603, 370);
-		panelViewAbility.add(bgViewAbility);
+		viewAbilityPane.add(bgViewAbility);
 		
-		Panel panelEditMH = new Panel();
-		panelContent.add(panelEditMH, "EditMH");
-		panelEditMH.setLayout(null);
+		Panel editMHPane = new Panel();
+		contentPane.add(editMHPane, "EditMH");
+		editMHPane.setLayout(null);
 		
 		JButton btnBackEditMH = new JButton("");
 		btnBackEditMH.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/arrow-leftpressed.png")));
@@ -824,63 +810,63 @@ public class MainMenuFrame {
 		btnBackEditMH.setContentAreaFilled(false);
 		btnBackEditMH.setBorderPainted(false);
 		btnBackEditMH.setBounds(0, 0, 32, 32);
-		panelEditMH.add(btnBackEditMH);
+		editMHPane.add(btnBackEditMH);
 		
 		JButton btnUpdateEditMH = new JButton("Atualizar");
 		btnUpdateEditMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		btnUpdateEditMH.setBorder(null);
 		btnUpdateEditMH.setBackground(Color.WHITE);
 		btnUpdateEditMH.setBounds(444, 296, 110, 33);
-		panelEditMH.add(btnUpdateEditMH);
+		editMHPane.add(btnUpdateEditMH);
 		
 		JLabel lblEditarMetahumano = new JLabel("Editar Meta-Humano");
 		lblEditarMetahumano.setForeground(Color.GRAY);
 		lblEditarMetahumano.setFont(new Font("Nirmala UI", Font.PLAIN, 20));
 		lblEditarMetahumano.setBounds(42, 121, 187, 28);
-		panelEditMH.add(lblEditarMetahumano);
+		editMHPane.add(lblEditarMetahumano);
 		
 		JSeparator separator_8 = new JSeparator();
 		separator_8.setName("Menu Principal");
 		separator_8.setBorder(new EmptyBorder(1, 1, 1, 1));
 		separator_8.setBounds(30, 158, 546, 2);
-		panelEditMH.add(separator_8);
+		editMHPane.add(separator_8);
 		
 		JLabel label_10 = new JLabel("Nome:");
 		label_10.setForeground(Color.GRAY);
 		label_10.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		label_10.setBounds(58, 172, 34, 21);
-		panelEditMH.add(label_10);
+		editMHPane.add(label_10);
 		
 		JLabel label_14 = new JLabel("Idade:");
 		label_14.setForeground(Color.GRAY);
 		label_14.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		label_14.setBounds(60, 197, 32, 21);
-		panelEditMH.add(label_14);
+		editMHPane.add(label_14);
 		
 		JLabel label_16 = new JLabel("Habilidade:");
 		label_16.setForeground(Color.GRAY);
 		label_16.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		label_16.setBounds(328, 198, 59, 21);
-		panelEditMH.add(label_16);
+		editMHPane.add(label_16);
 		
 		JLabel label_17 = new JLabel("Primeira apari\u00E7\u00E3o:");
 		label_17.setForeground(Color.GRAY);
 		label_17.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		label_17.setBounds(296, 173, 91, 21);
-		panelEditMH.add(label_17);
+		editMHPane.add(label_17);
 		
 		JLabel label_18 = new JLabel("Hist\u00F3ria:");
 		label_18.setForeground(Color.GRAY);
 		label_18.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		label_18.setBounds(49, 225, 43, 21);
-		panelEditMH.add(label_18);
+		editMHPane.add(label_18);
 		
 		JButton btnFotoEditMH = new JButton("Foto");
 		btnFotoEditMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		btnFotoEditMH.setBorder(null);
 		btnFotoEditMH.setBackground(Color.WHITE);
 		btnFotoEditMH.setBounds(444, 253, 110, 33);
-		panelEditMH.add(btnFotoEditMH);
+		editMHPane.add(btnFotoEditMH);
 		
 		textFieldNomeEditMH = new JTextField();
 		textFieldNomeEditMH.setText("<nome>");
@@ -889,7 +875,7 @@ public class MainMenuFrame {
 		textFieldNomeEditMH.setColumns(10);
 		textFieldNomeEditMH.setBackground(Color.WHITE);
 		textFieldNomeEditMH.setBounds(119, 172, 152, 21);
-		panelEditMH.add(textFieldNomeEditMH);
+		editMHPane.add(textFieldNomeEditMH);
 		
 		textFieldIdadeEditMH = new JTextField();
 		textFieldIdadeEditMH.setText("<idade>");
@@ -898,25 +884,25 @@ public class MainMenuFrame {
 		textFieldIdadeEditMH.setColumns(10);
 		textFieldIdadeEditMH.setBackground(Color.WHITE);
 		textFieldIdadeEditMH.setBounds(119, 198, 152, 21);
-		panelEditMH.add(textFieldIdadeEditMH);
+		editMHPane.add(textFieldIdadeEditMH);
 		
 		JEditorPane textFieldHistoriaEditMH = new JEditorPane();
 		textFieldHistoriaEditMH.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		textFieldHistoriaEditMH.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ");
 		textFieldHistoriaEditMH.setBounds(44, 253, 390, 75);
-		panelEditMH.add(textFieldHistoriaEditMH);
+		editMHPane.add(textFieldHistoriaEditMH);
 		
 		JComboBox comboBoxCidadeEditMH = new JComboBox();
 		comboBoxCidadeEditMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		comboBoxCidadeEditMH.setBackground(Color.WHITE);
 		comboBoxCidadeEditMH.setBounds(402, 171, 152, 21);
-		panelEditMH.add(comboBoxCidadeEditMH);
+		editMHPane.add(comboBoxCidadeEditMH);
 		
 		JComboBox comboBoxHabilidadeEditMH = new JComboBox();
 		comboBoxHabilidadeEditMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		comboBoxHabilidadeEditMH.setBackground(Color.WHITE);
 		comboBoxHabilidadeEditMH.setBounds(402, 198, 152, 21);
-		panelEditMH.add(comboBoxHabilidadeEditMH);
+		editMHPane.add(comboBoxHabilidadeEditMH);
 		
 		JButton btnExcludeEditMH = new JButton("");
 		btnExcludeEditMH.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/trash-iconpressed.png")));
@@ -924,18 +910,18 @@ public class MainMenuFrame {
 		btnExcludeEditMH.setContentAreaFilled(false);
 		btnExcludeEditMH.setBorderPainted(false);
 		btnExcludeEditMH.setBounds(522, 117, 32, 32);
-		panelEditMH.add(btnExcludeEditMH);
+		editMHPane.add(btnExcludeEditMH);
 		
 		JLabel bgEditMH = new JLabel("");
 		bgEditMH.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/bg-base.jpg")));
 		bgEditMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		bgEditMH.setBackground(Color.WHITE);
 		bgEditMH.setBounds(0, 0, 603, 370);
-		panelEditMH.add(bgEditMH);
+		editMHPane.add(bgEditMH);
 		
-		Panel panelEditCity = new Panel();
-		panelContent.add(panelEditCity, "EditCity");
-		panelEditCity.setLayout(null);
+		Panel editCityPane = new Panel();
+		contentPane.add(editCityPane, "EditCity");
+		editCityPane.setLayout(null);
 		
 		JButton btnBackEditCity = new JButton("");
 		btnBackEditCity.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/arrow-leftpressed.png")));
@@ -943,38 +929,38 @@ public class MainMenuFrame {
 		btnBackEditCity.setContentAreaFilled(false);
 		btnBackEditCity.setBorderPainted(false);
 		btnBackEditCity.setBounds(0, 0, 32, 32);
-		panelEditCity.add(btnBackEditCity);
+		editCityPane.add(btnBackEditCity);
 		
 		JButton btnUpdateEditCity = new JButton("Atualizar");
 		btnUpdateEditCity.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		btnUpdateEditCity.setBorder(null);
 		btnUpdateEditCity.setBackground(Color.WHITE);
 		btnUpdateEditCity.setBounds(445, 296, 110, 33);
-		panelEditCity.add(btnUpdateEditCity);
+		editCityPane.add(btnUpdateEditCity);
 		
 		JLabel lblEditarCidade = new JLabel("Editar Cidade");
 		lblEditarCidade.setForeground(Color.GRAY);
 		lblEditarCidade.setFont(new Font("Nirmala UI", Font.PLAIN, 20));
 		lblEditarCidade.setBounds(42, 121, 187, 28);
-		panelEditCity.add(lblEditarCidade);
+		editCityPane.add(lblEditarCidade);
 		
 		JSeparator separator_9 = new JSeparator();
 		separator_9.setName("Menu Principal");
 		separator_9.setBorder(new EmptyBorder(1, 1, 1, 1));
 		separator_9.setBounds(30, 158, 546, 2);
-		panelEditCity.add(separator_9);
+		editCityPane.add(separator_9);
 		
 		JLabel labelNome = new JLabel("Nome:");
 		labelNome.setForeground(Color.GRAY);
 		labelNome.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		labelNome.setBounds(154, 210, 34, 21);
-		panelEditCity.add(labelNome);
+		editCityPane.add(labelNome);
 		
 		JLabel labelPais = new JLabel("Pa\u00EDs:");
 		labelPais.setForeground(Color.GRAY);
 		labelPais.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		labelPais.setBounds(164, 242, 23, 21);
-		panelEditCity.add(labelPais);
+		editCityPane.add(labelPais);
 		
 		textFieldNomeEditCity = new JTextField();
 		textFieldNomeEditCity.setText("<nome da cidade>");
@@ -982,7 +968,7 @@ public class MainMenuFrame {
 		textFieldNomeEditCity.setColumns(10);
 		textFieldNomeEditCity.setBackground(Color.WHITE);
 		textFieldNomeEditCity.setBounds(198, 211, 237, 21);
-		panelEditCity.add(textFieldNomeEditCity);
+		editCityPane.add(textFieldNomeEditCity);
 		
 		textFieldPaisEditCity = new JTextField();
 		textFieldPaisEditCity.setText("<nome do pa\u00EDs>");
@@ -990,7 +976,7 @@ public class MainMenuFrame {
 		textFieldPaisEditCity.setColumns(10);
 		textFieldPaisEditCity.setBackground(Color.WHITE);
 		textFieldPaisEditCity.setBounds(197, 243, 238, 21);
-		panelEditCity.add(textFieldPaisEditCity);
+		editCityPane.add(textFieldPaisEditCity);
 		
 		JButton btnExcludeEditCity = new JButton("");
 		btnExcludeEditCity.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/trash-iconpressed.png")));
@@ -998,18 +984,18 @@ public class MainMenuFrame {
 		btnExcludeEditCity.setContentAreaFilled(false);
 		btnExcludeEditCity.setBorderPainted(false);
 		btnExcludeEditCity.setBounds(523, 117, 32, 32);
-		panelEditCity.add(btnExcludeEditCity);
+		editCityPane.add(btnExcludeEditCity);
 		
 		JLabel bgEditCity = new JLabel("");
 		bgEditCity.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/bg-base.jpg")));
 		bgEditCity.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		bgEditCity.setBackground(Color.WHITE);
 		bgEditCity.setBounds(0, 0, 603, 370);
-		panelEditCity.add(bgEditCity);
+		editCityPane.add(bgEditCity);
 		
-		Panel panelEditAbility = new Panel();
-		panelContent.add(panelEditAbility, "EditAbility");
-		panelEditAbility.setLayout(null);
+		Panel editAbilityPane = new Panel();
+		contentPane.add(editAbilityPane, "EditAbility");
+		editAbilityPane.setLayout(null);
 		
 		JButton btnBackEditAbility = new JButton("");
 		btnBackEditAbility.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/arrow-leftpressed.png")));
@@ -1018,32 +1004,32 @@ public class MainMenuFrame {
 		btnBackEditAbility.setContentAreaFilled(false);
 		btnBackEditAbility.setBorderPainted(false);
 		btnBackEditAbility.setBounds(0, 0, 32, 32);
-		panelEditAbility.add(btnBackEditAbility);
+		editAbilityPane.add(btnBackEditAbility);
 		
 		JLabel lblEditarHabilidade = new JLabel("Editar Habilidade");
 		lblEditarHabilidade.setForeground(Color.GRAY);
 		lblEditarHabilidade.setFont(new Font("Nirmala UI", Font.PLAIN, 20));
 		lblEditarHabilidade.setBounds(42, 121, 187, 28);
-		panelEditAbility.add(lblEditarHabilidade);
+		editAbilityPane.add(lblEditarHabilidade);
 		
 		JSeparator separatorEditAbility = new JSeparator();
 		separatorEditAbility.setName("Menu Principal");
 		separatorEditAbility.setBorder(new EmptyBorder(1, 1, 1, 1));
 		separatorEditAbility.setBounds(30, 158, 546, 2);
-		panelEditAbility.add(separatorEditAbility);
+		editAbilityPane.add(separatorEditAbility);
 		
 		JButton btnUpdateEditAbility = new JButton("Atualizar");
 		btnUpdateEditAbility.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		btnUpdateEditAbility.setBorder(null);
 		btnUpdateEditAbility.setBackground(Color.WHITE);
 		btnUpdateEditAbility.setBounds(445, 296, 110, 33);
-		panelEditAbility.add(btnUpdateEditAbility);
+		editAbilityPane.add(btnUpdateEditAbility);
 		
 		JLabel labelNomeEditAbility = new JLabel("Nome:");
 		labelNomeEditAbility.setForeground(Color.GRAY);
 		labelNomeEditAbility.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		labelNomeEditAbility.setBounds(61, 195, 34, 21);
-		panelEditAbility.add(labelNomeEditAbility);
+		editAbilityPane.add(labelNomeEditAbility);
 		
 		textFieldNomeEditAbility = new JTextField();
 		textFieldNomeEditAbility.setText("<nome da habilidade>");
@@ -1051,18 +1037,18 @@ public class MainMenuFrame {
 		textFieldNomeEditAbility.setColumns(10);
 		textFieldNomeEditAbility.setBackground(Color.WHITE);
 		textFieldNomeEditAbility.setBounds(105, 195, 330, 21);
-		panelEditAbility.add(textFieldNomeEditAbility);
+		editAbilityPane.add(textFieldNomeEditAbility);
 		
 		JLabel labelDescEditAbility = new JLabel("Descri\u00E7\u00E3o:");
 		labelDescEditAbility.setForeground(Color.GRAY);
 		labelDescEditAbility.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		labelDescEditAbility.setBounds(43, 227, 52, 21);
-		panelEditAbility.add(labelDescEditAbility);
+		editAbilityPane.add(labelDescEditAbility);
 		
 		JEditorPane editorPaneDescEditAbility = new JEditorPane();
 		editorPaneDescEditAbility.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ");
 		editorPaneDescEditAbility.setBounds(105, 227, 330, 102);
-		panelEditAbility.add(editorPaneDescEditAbility);
+		editAbilityPane.add(editorPaneDescEditAbility);
 		
 		JButton btnExcludeEditAbility = new JButton("");
 		btnExcludeEditAbility.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/trash-iconpressed.png")));
@@ -1070,68 +1056,341 @@ public class MainMenuFrame {
 		btnExcludeEditAbility.setContentAreaFilled(false);
 		btnExcludeEditAbility.setBorderPainted(false);
 		btnExcludeEditAbility.setBounds(523, 117, 32, 32);
-		panelEditAbility.add(btnExcludeEditAbility);
+		editAbilityPane.add(btnExcludeEditAbility);
 		
 		JLabel bgEditAbility = new JLabel("");
 		bgEditAbility.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/bg-base.jpg")));
 		bgEditAbility.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		bgEditAbility.setBackground(Color.WHITE);
 		bgEditAbility.setBounds(0, 0, 603, 370);
-		panelEditAbility.add(bgEditAbility);
-		btnBackEditAbility.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-				cardLayout.show(panelContent, "MainMenu");
-			}
-		});
-		btnBackEditCity.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-				cardLayout.show(panelContent, "MainMenu");
-			}
-		});
-		btnBackEditMH.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-				cardLayout.show(panelContent, "MainMenu");
-			}
-		});
-		btnBackViewAbility.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-				cardLayout.show(panelContent, "MainMenu");
-			}
-		});
-		btnBackViewCity.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-				cardLayout.show(panelContent, "MainMenu");
-			}
-		});
-		btnBackViewMH.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-				cardLayout.show(panelContent, "MainMenu");
-			}
-		});
-		btnBackNewAbility.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-				cardLayout.show(panelContent, "MainMenu");
-			}
-		});
-		btnBackNewCity.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-				cardLayout.show(panelContent, "MainMenu");
-			}
-		});
+		editAbilityPane.add(bgEditAbility);
+		
+		JPanel profilePane = new JPanel();
+		contentPane.add(profilePane, "Profile");
+		profilePane.setLayout(null);
+		
+		JButton btnBackProfile = new JButton("");
+		btnBackProfile.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/arrow-leftpressed.png")));
+		btnBackProfile.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/arrow-left-edited1.png")));
+		btnBackProfile.setContentAreaFilled(false);
+		btnBackProfile.setBorderPainted(false);
+		btnBackProfile.setBounds(0, 0, 32, 32);
+		profilePane.add(btnBackProfile);
+		
+		JLabel labelTitleProfile = new JLabel("Editar Perfil");
+		labelTitleProfile.setForeground(Color.GRAY);
+		labelTitleProfile.setFont(new Font("Nirmala UI", Font.PLAIN, 20));
+		labelTitleProfile.setBounds(42, 121, 392, 28);
+		profilePane.add(labelTitleProfile);
+		
+		JSeparator separator_10 = new JSeparator();
+		separator_10.setName("Menu Principal");
+		separator_10.setBorder(new EmptyBorder(1, 1, 1, 1));
+		separator_10.setBounds(30, 158, 546, 2);
+		profilePane.add(separator_10);
+		
+		JButton btnExcludeProfile = new JButton("");
+		btnExcludeProfile.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/trash-iconpressed.png")));
+		btnExcludeProfile.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/trash-icon.png")));
+		btnExcludeProfile.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		btnExcludeProfile.setContentAreaFilled(false);
+		btnExcludeProfile.setBorderPainted(false);
+		btnExcludeProfile.setBorder(null);
+		btnExcludeProfile.setBackground(Color.WHITE);
+		btnExcludeProfile.setBounds(522, 118, 32, 32);
+		profilePane.add(btnExcludeProfile);
+		
+		JLabel lblEmail = new JLabel("E-mail:");
+		lblEmail.setForeground(Color.GRAY);
+		lblEmail.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
+		lblEmail.setBounds(213, 203, 91, 21);
+		profilePane.add(lblEmail);
+		
+		JLabel lblNomeProfile = new JLabel("Nome:");
+		lblNomeProfile.setForeground(Color.GRAY);
+		lblNomeProfile.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
+		lblNomeProfile.setBounds(213, 171, 43, 21);
+		profilePane.add(lblNomeProfile);
+		
+		JButton btnFotoProfile = new JButton("");
+		btnFotoProfile.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/edit-icon.png")));
+		btnFotoProfile.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		btnFotoProfile.setContentAreaFilled(false);
+		btnFotoProfile.setBorderPainted(false);
+		btnFotoProfile.setBorder(null);
+		btnFotoProfile.setBackground(Color.WHITE);
+		btnFotoProfile.setBounds(53, 296, 32, 32);
+		profilePane.add(btnFotoProfile);
+		
+		JLabel label_12 = new JLabel("Foto 150x150");
+		label_12.setHorizontalAlignment(SwingConstants.CENTER);
+		label_12.setForeground(Color.WHITE);
+		label_12.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
+		label_12.setBorder(new EmptyBorder(1, 1, 1, 1));
+		label_12.setBackground(Color.DARK_GRAY);
+		label_12.setBounds(53, 178, 150, 150);
+		profilePane.add(label_12);
+		
+		JSeparator separator_11 = new JSeparator();
+		separator_11.setName("Menu Principal");
+		separator_11.setBorder(new EmptyBorder(1, 1, 1, 1));
+		separator_11.setBounds(211, 235, 363, 2);
+		profilePane.add(separator_11);
+		
+		JLabel lblSenhaAtual = new JLabel("Senha atual:");
+		lblSenhaAtual.setForeground(Color.GRAY);
+		lblSenhaAtual.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
+		lblSenhaAtual.setBounds(213, 248, 68, 21);
+		profilePane.add(lblSenhaAtual);
+		
+		JLabel lblNovaSenha = new JLabel("Nova senha:");
+		lblNovaSenha.setForeground(Color.GRAY);
+		lblNovaSenha.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
+		lblNovaSenha.setBounds(213, 280, 68, 21);
+		profilePane.add(lblNovaSenha);
+		
+		JLabel lblConfirmao = new JLabel("Confirma\u00E7\u00E3o:");
+		lblConfirmao.setForeground(Color.GRAY);
+		lblConfirmao.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
+		lblConfirmao.setBounds(213, 312, 68, 21);
+		profilePane.add(lblConfirmao);
+		
+		textFieldNomeProfile = new JTextField();
+		textFieldNomeProfile.setSelectionColor(new Color(255, 255, 102));
+		textFieldNomeProfile.setColumns(10);
+		textFieldNomeProfile.setBackground(Color.WHITE);
+		textFieldNomeProfile.setBounds(291, 171, 210, 21);
+		profilePane.add(textFieldNomeProfile);
+		
+		textFieldEmailProfile = new JTextField();
+		textFieldEmailProfile.setSelectionColor(new Color(255, 255, 102));
+		textFieldEmailProfile.setColumns(10);
+		textFieldEmailProfile.setBackground(Color.WHITE);
+		textFieldEmailProfile.setBounds(291, 203, 210, 21);
+		profilePane.add(textFieldEmailProfile);
+		
+		textFieldSenhaAtualProfile = new JTextField();
+		textFieldSenhaAtualProfile.setSelectionColor(new Color(255, 255, 102));
+		textFieldSenhaAtualProfile.setColumns(10);
+		textFieldSenhaAtualProfile.setBackground(Color.WHITE);
+		textFieldSenhaAtualProfile.setBounds(291, 247, 210, 21);
+		profilePane.add(textFieldSenhaAtualProfile);
+		
+		textFieldNovaSenhaProfile_1 = new JTextField();
+		textFieldNovaSenhaProfile_1.setSelectionColor(new Color(255, 255, 102));
+		textFieldNovaSenhaProfile_1.setColumns(10);
+		textFieldNovaSenhaProfile_1.setBackground(Color.WHITE);
+		textFieldNovaSenhaProfile_1.setBounds(291, 280, 210, 21);
+		profilePane.add(textFieldNovaSenhaProfile_1);
+		
+		textFieldNovaSenhaProfile_2 = new JTextField();
+		textFieldNovaSenhaProfile_2.setSelectionColor(new Color(255, 255, 102));
+		textFieldNovaSenhaProfile_2.setColumns(10);
+		textFieldNovaSenhaProfile_2.setBackground(Color.WHITE);
+		textFieldNovaSenhaProfile_2.setBounds(291, 312, 210, 21);
+		profilePane.add(textFieldNovaSenhaProfile_2);
+		
+		JButton btnUpdateProfile_1 = new JButton("Ir");
+		btnUpdateProfile_1.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		btnUpdateProfile_1.setContentAreaFilled(false);
+		btnUpdateProfile_1.setBorderPainted(false);
+		btnUpdateProfile_1.setBorder(null);
+		btnUpdateProfile_1.setBackground(Color.WHITE);
+		btnUpdateProfile_1.setBounds(522, 192, 32, 32);
+		profilePane.add(btnUpdateProfile_1);
+		
+		JButton btnUpdateProfile_2 = new JButton("Ir");
+		btnUpdateProfile_2.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		btnUpdateProfile_2.setContentAreaFilled(false);
+		btnUpdateProfile_2.setBorderPainted(false);
+		btnUpdateProfile_2.setBorder(null);
+		btnUpdateProfile_2.setBackground(Color.WHITE);
+		btnUpdateProfile_2.setBounds(522, 296, 32, 32);
+		profilePane.add(btnUpdateProfile_2);
+		
+		JLabel bgProfile = new JLabel("");
+		bgProfile.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/bg-base.jpg")));
+		bgProfile.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		bgProfile.setBackground(Color.WHITE);
+		bgProfile.setBounds(0, 0, 603, 370);
+		profilePane.add(bgProfile);
+		
+		JPanel viewUsersPane = new JPanel();
+		contentPane.add(viewUsersPane, "ViewUsers");
+		viewUsersPane.setLayout(null);
+		
+		JButton btnBackViewUsers = new JButton("");
+		btnBackViewUsers.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/arrow-leftpressed.png")));
+		btnBackViewUsers.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/arrow-left-edited1.png")));
+		btnBackViewUsers.setContentAreaFilled(false);
+		btnBackViewUsers.setBorderPainted(false);
+		btnBackViewUsers.setBounds(0, 0, 32, 32);
+		viewUsersPane.add(btnBackViewUsers);
+		
+		JLabel lblGerenciarUsurio = new JLabel("Gerenciar usu\u00E1rio");
+		lblGerenciarUsurio.setForeground(Color.GRAY);
+		lblGerenciarUsurio.setFont(new Font("Nirmala UI", Font.PLAIN, 20));
+		lblGerenciarUsurio.setBounds(42, 121, 157, 28);
+		viewUsersPane.add(lblGerenciarUsurio);
+		
+		JSeparator separator_12 = new JSeparator();
+		separator_12.setName("Menu Principal");
+		separator_12.setBorder(new EmptyBorder(1, 1, 1, 1));
+		separator_12.setBounds(30, 158, 546, 2);
+		viewUsersPane.add(separator_12);
+		
+		JButton btnExcludeViewUsers = new JButton("");
+		btnExcludeViewUsers.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/trash-icon.png")));
+		btnExcludeViewUsers.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/trash-iconpressed.png")));
+		btnExcludeViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		btnExcludeViewUsers.setContentAreaFilled(false);
+		btnExcludeViewUsers.setBorderPainted(false);
+		btnExcludeViewUsers.setBorder(null);
+		btnExcludeViewUsers.setBackground(Color.WHITE);
+		btnExcludeViewUsers.setBounds(522, 118, 32, 32);
+		viewUsersPane.add(btnExcludeViewUsers);
+		
+		JLabel lblEmail_1 = new JLabel("Email:");
+		lblEmail_1.setForeground(Color.GRAY);
+		lblEmail_1.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
+		lblEmail_1.setBounds(254, 242, 32, 21);
+		viewUsersPane.add(lblEmail_1);
+		
+		JLabel lblId = new JLabel("ID:");
+		lblId.setForeground(Color.GRAY);
+		lblId.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
+		lblId.setBounds(272, 210, 14, 21);
+		viewUsersPane.add(lblId);
+		
+		JLabel lblNome_1 = new JLabel("Nome:");
+		lblNome_1.setForeground(Color.GRAY);
+		lblNome_1.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
+		lblNome_1.setBounds(253, 178, 33, 21);
+		viewUsersPane.add(lblNome_1);
+		
+		JLabel lblIdViewUsers = new JLabel("<id>");
+		lblIdViewUsers.setForeground(Color.BLACK);
+		lblIdViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		lblIdViewUsers.setBounds(316, 210, 202, 21);
+		viewUsersPane.add(lblIdViewUsers);
+		
+		JLabel lblFotoViewUsers = new JLabel("Foto 150x150");
+		lblFotoViewUsers.setHorizontalAlignment(SwingConstants.CENTER);
+		lblFotoViewUsers.setForeground(Color.WHITE);
+		lblFotoViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
+		lblFotoViewUsers.setBorder(new EmptyBorder(1, 1, 1, 1));
+		lblFotoViewUsers.setBackground(Color.DARK_GRAY);
+		lblFotoViewUsers.setBounds(53, 178, 150, 150);
+		viewUsersPane.add(lblFotoViewUsers);
+		
+		JLabel lblEmailViewUsers = new JLabel("<email>");
+		lblEmailViewUsers.setForeground(Color.BLACK);
+		lblEmailViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		lblEmailViewUsers.setBounds(314, 242, 202, 21);
+		viewUsersPane.add(lblEmailViewUsers);
+		
+		JLabel lblColaboraes = new JLabel("Colabora\u00E7\u00F5es:");
+		lblColaboraes.setForeground(Color.GRAY);
+		lblColaboraes.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
+		lblColaboraes.setBounds(213, 274, 73, 21);
+		viewUsersPane.add(lblColaboraes);
+		
+		JLabel lblTipo = new JLabel("Tipo:");
+		lblTipo.setForeground(Color.GRAY);
+		lblTipo.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
+		lblTipo.setBounds(261, 307, 25, 21);
+		viewUsersPane.add(lblTipo);
+		
+		JLabel lblTipoViewUsers = new JLabel("<user ou admin>");
+		lblTipoViewUsers.setForeground(Color.BLACK);
+		lblTipoViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		lblTipoViewUsers.setBounds(316, 306, 202, 21);
+		viewUsersPane.add(lblTipoViewUsers);
+		
+		JComboBox comboBoxColabViewUsers = new JComboBox();
+		comboBoxColabViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		comboBoxColabViewUsers.setBackground(Color.WHITE);
+		comboBoxColabViewUsers.setBounds(316, 274, 202, 21);
+		viewUsersPane.add(comboBoxColabViewUsers);
+		
+		JComboBox comboBoxNomeViewUsers = new JComboBox();
+		comboBoxNomeViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		comboBoxNomeViewUsers.setBackground(Color.WHITE);
+		comboBoxNomeViewUsers.setBounds(316, 179, 202, 21);
+		viewUsersPane.add(comboBoxNomeViewUsers);
+		
+		JButton btnPromoteViewUsers = new JButton("");
+		btnPromoteViewUsers.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/crown-iconpressed.png")));
+		btnPromoteViewUsers.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/crown-icon.png")));
+		btnPromoteViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		btnPromoteViewUsers.setContentAreaFilled(false);
+		btnPromoteViewUsers.setBorderPainted(false);
+		btnPromoteViewUsers.setBorder(null);
+		btnPromoteViewUsers.setBackground(Color.WHITE);
+		btnPromoteViewUsers.setBounds(480, 118, 32, 32);
+		viewUsersPane.add(btnPromoteViewUsers);
+		
+		JLabel bgViewUsers = new JLabel("");
+		bgViewUsers.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/bg-base.jpg")));
+		bgViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		bgViewUsers.setBackground(Color.WHITE);
+		bgViewUsers.setBounds(0, 0, 603, 370);
+		viewUsersPane.add(bgViewUsers);
 		
 		//btnBack Listeners
 		btnBackNewMH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				CardLayout cardLayout = (CardLayout) panelContent.getLayout();
-				cardLayout.show(panelContent, "MainMenu");
+				showMainMenu(contentPane);
+			}
+		});
+		btnBackEditAbility.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				showMainMenu(contentPane);
+			}
+		});
+		btnBackEditCity.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				showMainMenu(contentPane);
+			}
+		});
+		btnBackEditMH.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				showMainMenu(contentPane);
+			}
+		});
+		btnBackViewAbility.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				showMainMenu(contentPane);
+			}
+		});
+		btnBackViewCity.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				showMainMenu(contentPane);
+			}
+		});
+		btnBackViewMH.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				showMainMenu(contentPane);
+			}
+		});
+		btnBackNewAbility.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showMainMenu(contentPane);
+			}
+		});
+		btnBackNewCity.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				showMainMenu(contentPane);
+			}
+		});
+		btnBackProfile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				showMainMenu(contentPane);
+			}
+		});
+		btnBackViewUsers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showMainMenu(contentPane);
 			}
 		});
 	}

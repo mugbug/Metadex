@@ -147,7 +147,7 @@ public class LoginFrame {
 				}
 				else{
 					String message = "Email ou senha inválidos!";
-					JOptionPane.showMessageDialog(LoginFrame, message, "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(LoginFrame, message, "Erro", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -162,10 +162,5 @@ public class LoginFrame {
 		label.setBounds(-13, -2, 290, 327);
 		label.setIcon(new ImageIcon(LoginFrame.class.getResource("/view/img/login.jpg")));
 		LoginFrame.getContentPane().add(label);
-		
-		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 274, 321);
-		LoginFrame.getContentPane().add(panel);
-		panel.setLayout(null);
 	}
 }
