@@ -80,4 +80,15 @@ public class CityDaoData implements CityDao{
 		   }
 	      
 	   }
+
+	@Override
+	public String[] getNames() {
+		List<String> nameList = new ArrayList<String>();
+		nameList.add("");
+		for(City c : cities){
+			nameList.add(c.getName());
+		}
+		String[] names = new String[nameList.size()];
+		return nameList.toArray(names);
+	}
 }

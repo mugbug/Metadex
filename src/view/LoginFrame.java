@@ -90,7 +90,6 @@ public class LoginFrame {
 				try {
 					NewUserFrame window = new NewUserFrame();
 					window.NewUserFrame.setVisible(true);
-					LoginFrame.dispose();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -12,8 +12,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public abstract class ImageOpener {
-	public ImageIcon getImage(ActionEvent e, JButton btn){
-		ImageIcon icon = new ImageIcon();
+	public BufferedImage getImage(ActionEvent e, JButton btn){
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"Image Files", "jpg", "png", "gif", "jpeg");
 		JFileChooser fc = new JFileChooser();
@@ -34,10 +33,11 @@ public abstract class ImageOpener {
 	                img = ImageIO.read(file);
 	            } catch (IOException ioe) {
 	            }
-	            icon.setImage(img);
+
+	     	   return img;
 	        }
 	   }
-	   return icon;
+	   return null;
 		
 	}
 }

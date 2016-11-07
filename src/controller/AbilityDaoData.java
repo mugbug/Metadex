@@ -80,4 +80,15 @@ public class AbilityDaoData implements AbilityDao{
 		   }
 	      
 	   }
+
+	@Override
+	public String[] getNames() {
+		List<String> nameList = new ArrayList<String>();
+		nameList.add("");
+		for(Ability a : abilities){
+			nameList.add(a.getName());
+		}
+		String[] names = new String[nameList.size()];
+		return nameList.toArray(names);
+	}
 }

@@ -25,7 +25,7 @@ public class MetaHumanDaoData implements MetaHumanDao{
 	   public void addMetaHuman(MetaHuman metaHuman){
 		   metaHumans.add(metaHuman);
 		   try {
-				String message = "Usuario cadastrado com sucesso!\n";
+				String message = "Meta-humano cadastrado com\nsucesso!\n";
 				message += "Nome: " + metaHuman.getName();
 				NotificationDialog dialog = new NotificationDialog(2, message);
 				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -96,4 +96,15 @@ public class MetaHumanDaoData implements MetaHumanDao{
 		   }
 	      //System.out.println("MetaHuman: Roll No " + MetaHuman.getId() + ", updated in the database");
 	   }
+
+	@Override
+	public String[] getNames() {
+		List<String> nameList = new ArrayList<String>();
+		nameList.add("");
+		for(MetaHuman mh : metaHumans){
+			nameList.add(mh.getName());
+		}
+		String[] names = new String[nameList.size()];
+		return nameList.toArray(names);
+	}
 }

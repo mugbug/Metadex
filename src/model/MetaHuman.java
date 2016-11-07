@@ -40,10 +40,10 @@ public class MetaHuman {
 	public void setAge(String age) {
 		this.age = age;
 	}
-	public String getHability() {
+	public String getAbility() {
 		return ability;
 	}
-	public void setHability(String ability) {
+	public void setAbility(String ability) {
 		this.ability = ability;
 	}
 	public String getHomeTown() {

@@ -10,4 +10,5 @@ public interface AbilityDao {
 	public Ability getAbility(String name);
 	public void updateAbility(Ability ability);
 	public void deleteAbility(Ability ability);
+	public String[] getNames();
 }

@@ -1,15 +1,11 @@
 package view;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import java.awt.Font;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -20,22 +16,23 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
-import javax.swing.JToggleButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import controller.ImageOpener;
 import controller.UserDao;
 import controller.UserDaoData;
 import model.User;
 
 import java.awt.Toolkit;
+import javax.swing.JPasswordField;
 
 public class NewUserFrame {
 
 	public JFrame NewUserFrame;
 	private JTextField textFieldNome;
 	private JTextField textFieldEmail;
-	private JTextField textFieldSenha_1;
-	private JTextField textFieldSenha_2;
+	private JPasswordField textFieldSenha_1;
+	private JPasswordField textFieldSenha_2;
 
 	/**
 	 * Launch the application.
@@ -75,6 +72,7 @@ public class NewUserFrame {
 		NewUserFrame.getContentPane().setBackground(Color.WHITE);
 		NewUserFrame.getContentPane().setLayout(null);
 		NewUserFrame.setLocationRelativeTo(null);
+		NewUserFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		textFieldNome = new JTextField();
 		textFieldNome.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
@@ -90,13 +88,13 @@ public class NewUserFrame {
 		textFieldEmail.setColumns(10);
 		
 		
-		textFieldSenha_1 = new JTextField();
+		textFieldSenha_1 = new JPasswordField();
 		textFieldSenha_1.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		textFieldSenha_1.setBounds(133, 276, 142, 21);
 		NewUserFrame.getContentPane().add(textFieldSenha_1);
 		textFieldSenha_1.setColumns(10);
 		
-		textFieldSenha_2 = new JTextField();
+		textFieldSenha_2 = new JPasswordField();
 		textFieldSenha_2.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		textFieldSenha_2.setBounds(133, 325, 142, 21);
 		NewUserFrame.getContentPane().add(textFieldSenha_2);
@@ -130,6 +128,8 @@ public class NewUserFrame {
 			            icon.setImage(img);
 			        }
 			   }
+			   /*ImageOpener io = null;
+			   icon.setImage(io.getImage(arg0, btnFoto));*/
 			}
 		});
 		btnFoto.setBounds(39, 356, 225, 28);

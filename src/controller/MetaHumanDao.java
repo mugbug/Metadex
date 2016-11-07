@@ -10,4 +10,5 @@ public interface MetaHumanDao {
 	public MetaHuman getMetaHuman(String name);
 	public void updateMetaHuman(MetaHuman metaHuman);
 	public void deleteMetaHuman(MetaHuman metaHuman);
+	public String[] getNames();
 }

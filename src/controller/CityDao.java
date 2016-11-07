@@ -9,4 +9,5 @@ public interface CityDao {
 	public City getCity(String name);
 	public void updateCity(City city);
 	public void deleteCity(City city);
+	public String[] getNames();
 }
