@@ -37,21 +37,30 @@ public class MetaHumanDaoData implements MetaHumanDao{
 	   
 	   @Override
 	   public void deleteMetaHuman(MetaHuman metaHuman) {
+		   int index=0;
 		   for(MetaHuman mh : metaHumans){
-			  if(metaHuman.equals(mh)){
-				  metaHumans.remove(this);
+			  if(metaHuman.getName().equals(mh.getName())){
+				  metaHumans.remove(index);
+				  try {
+					  String message = "Meta-humano <"+mh.getName()+">\nremovido!";
+					  NotificationDialog dialog = new NotificationDialog(3, message);
+					  dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					  dialog.setVisible(true);
+				  } catch (Exception e) {
+					  e.printStackTrace();
+				  }
 				  return;
 			  }
+			  index++;
 		  }
 		  try {
-			  String message = "Meta-humano não cadastrado!";
+			  String message = "Meta-humano não pôde ser\nremovido!";
 			  NotificationDialog dialog = new NotificationDialog(3, message);
 			  dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			  dialog.setVisible(true);
 		  } catch (Exception e) {
 			  e.printStackTrace();
 		  }
-	      //System.out.println("MetaHuman: Roll No " + MetaHuman.getId() + ", deleted from database");
 	   }
 
 	   //retrive list of metaHumans from the database
@@ -81,20 +90,23 @@ public class MetaHumanDaoData implements MetaHumanDao{
 	   @Override
 	   public void updateMetaHuman(MetaHuman metaHuman) {
 		   for(MetaHuman mh : metaHumans){
-			   if(metaHuman.equals(mh)){
-				   metaHumans.remove(this);
-				   metaHumans.add(metaHuman);
+			   if(metaHuman.getName().equals(mh.getName())){
+				   mh.setAge(metaHuman.getAge());
+				   mh.setHomeTown(metaHuman.getHomeTown());
+				   mh.setAbility(metaHuman.getAbility());
+				   mh.setHistory(metaHuman.getHistory());
+				   mh.setImage(metaHuman.getImage());
+				   try {
+					   String message = "Meta-humano foi atualizado!";
+					   NotificationDialog dialog = new NotificationDialog(2, message);
+					   dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					   dialog.setVisible(true);
+				   } catch (Exception e) {
+					   e.printStackTrace();
+				   }
+				   return;
 			   }
 		   }
-		   try {
-			   String message = "Meta-humano não cadastrado!";
-			   NotificationDialog dialog = new NotificationDialog(3, message);
-			   dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			   dialog.setVisible(true);
-		   } catch (Exception e) {
-			   e.printStackTrace();
-		   }
-	      //System.out.println("MetaHuman: Roll No " + MetaHuman.getId() + ", updated in the database");
 	   }
 
 	@Override

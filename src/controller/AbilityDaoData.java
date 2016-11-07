@@ -31,14 +31,24 @@ public class AbilityDaoData implements AbilityDao{
 	   
 	   @Override
 	   public void deleteAbility(Ability ability) {
+		  int index=0;
 		  for(Ability a : abilities){
-			  if(ability.equals(a)){
-				  abilities.remove(this);
+			  if(ability.getName().equals(a.getName())){
+				  abilities.remove(index);
+				  try {
+					  String message = "Habilidade <"+a.getName()+">\nremovida!";
+					  NotificationDialog dialog = new NotificationDialog(3, message);
+					  dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					  dialog.setVisible(true);
+				  } catch (Exception e) {
+					  e.printStackTrace();
+				  }
 				  return;
 			  }
+			  index++;
 		  }
 		  try {
-			  String message = "Habilidade não cadastrada!";
+			  String message = "Habilidade não pôde ser\nremovida!";
 			  NotificationDialog dialog = new NotificationDialog(3, message);
 			  dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			  dialog.setVisible(true);
@@ -74,8 +84,17 @@ public class AbilityDaoData implements AbilityDao{
 	   public void updateAbility(Ability ability) {
 		   for(Ability a : abilities){
 			   if(ability.equals(a)){
-				   abilities.remove(this);
-				   abilities.add(ability);
+				   a.setName(ability.getName());
+				   a.setDescription(ability.getDescription());
+				   try {
+					   String message = "Habilidade foi atualizada!";
+					   NotificationDialog dialog = new NotificationDialog(2, message);
+					   dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					   dialog.setVisible(true);
+				   } catch (Exception e) {
+					   e.printStackTrace();
+				   }
+				   return;
 			   }
 		   }
 	      

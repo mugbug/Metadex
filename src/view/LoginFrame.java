@@ -1,68 +1,45 @@
 package view;
 
-import java.awt.EventQueue;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 import java.awt.Toolkit;
-import javax.swing.JPanel;
 import java.awt.Color;
 import javax.swing.JPasswordField;
-import javax.swing.JRootPane;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JTextField;
 
+import controller.UserDao;
+import controller.UserDaoData;
 import model.User;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.UIManager;
-
-import controller.UserDao;
-import controller.UserDaoData;
-
-import java.awt.Rectangle;
-import javax.swing.SwingConstants;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 public class LoginFrame {
 
-	
-	
 	public JFrame LoginFrame;
 	private JPasswordField passwordField;
 	private JTextField txtEmail;
-
-	/**
-	 * Launch the application.
-	 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginFrame window = new LoginFrame();
-					window.frmLogin.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-*/
+	
+//pega usuarios no banco
+	private UserDao users = new UserDaoData();
+	
+	
 	/**
 	 * Create the application.
 	 */
 	public LoginFrame() {
 		initialize();
+		importUsers();
 	}
-
+	private void importUsers(){
+		User admin = new User("admin", "admin");//user default p/ teste
+		users.addUser(admin);
+	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -123,40 +100,42 @@ public class LoginFrame {
 		
 		btnEntrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				@SuppressWarnings("deprecation")
 				User user = new User(txtEmail.getText(), passwordField.getText());
-				User expected = new User("admin", "admin");
-				if(user.equals(expected)){
-					if(user.getLevel() == 2){
-						//menu admin
+				for(User expected : users.getAllUsers()){
+					if(user.equals(expected)){
+						if(user.getLevel() == 2){
+							//menu admin
+							try {
+								MainMenuFrame window = new MainMenuFrame();
+								window.MainMenuFrame.setTitle("Metadex (admin)");
+								window.MainMenuFrame.setVisible(true);
+								LoginFrame.dispose();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+						else if(user.getLevel() == 1){
+							//menu normal user
+							try {
+								MainMenuFrame window = new MainMenuFrame();
+								window.MainMenuFrame.setTitle("Metadex");
+								window.MainMenuFrame.setVisible(true);
+								LoginFrame.dispose();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
+					else{
 						try {
-							MainMenuFrame window = new MainMenuFrame();
-							window.MainMenuFrame.setTitle("Metadex (admin)");
-							window.MainMenuFrame.setVisible(true);
-							LoginFrame.dispose();
+							String message = "Email ou senha inválidos!";
+							NotificationDialog dialog = new NotificationDialog(3, message);
+							dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+							dialog.setVisible(true);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-					}
-					else if(user.getLevel() == 1){
-						//menu normal user
-						try {
-							MainMenuFrame window = new MainMenuFrame();
-							window.MainMenuFrame.setTitle("Metadex");
-							window.MainMenuFrame.setVisible(true);
-							LoginFrame.dispose();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}
-				else{
-					try {
-						String message = "Email ou senha inválidos!";
-						NotificationDialog dialog = new NotificationDialog(3, message);
-						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-						dialog.setVisible(true);
-					} catch (Exception e) {
-						e.printStackTrace();
 					}
 				}
 			}

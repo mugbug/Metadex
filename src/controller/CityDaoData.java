@@ -31,14 +31,24 @@ public class CityDaoData implements CityDao{
 	   
 	   @Override
 	   public void deleteCity(City city) {
+		  int index=0;
 		  for(City c : cities){
-			  if(city.equals(c)){
-				  cities.remove(this);
+			  if(city.getName().equals(c.getName())){
+				  cities.remove(index);
+				  try {
+					  String message = "Cidade <"+c.getName()+">\nremovida!";
+					  NotificationDialog dialog = new NotificationDialog(3, message);
+					  dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					  dialog.setVisible(true);
+				  } catch (Exception e) {
+					  e.printStackTrace();
+				  }
 				  return;
 			  }
+			  index++;
 		  }
 		  try {
-			  String message = "Cidade não cadastrada!";
+			  String message = "Cidade não pôde ser\nremovida!";
 			  NotificationDialog dialog = new NotificationDialog(3, message);
 			  dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			  dialog.setVisible(true);
@@ -74,8 +84,17 @@ public class CityDaoData implements CityDao{
 	   public void updateCity(City city) {
 		   for(City c : cities){
 			   if(city.equals(c)){
-				   cities.remove(this);
-				   cities.add(city);
+				   c.setName(city.getName());
+				   c.setCountry(city.getCountry());
+				   try {
+					   String message = "Cidade foi atualizada!";
+					   NotificationDialog dialog = new NotificationDialog(2, message);
+					   dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					   dialog.setVisible(true);
+				   } catch (Exception e) {
+					   e.printStackTrace();
+				   }
+				   return;
 			   }
 		   }
 	      

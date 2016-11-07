@@ -9,13 +9,7 @@ import java.util.List;
 import javax.swing.JDialog;
 
 public class UserDaoData implements UserDao{
-	//list is working as a database
 	   List<User> users;
-	   /*
-	   public UserDaoImpl(User user){
-	      users = new ArrayList<User>();
-	      users.add(user);
-	   }*/
 	   
 	   public UserDaoData() {
 		   users = new ArrayList<User>();
@@ -24,7 +18,7 @@ public class UserDaoData implements UserDao{
 	   @Override
 	   public void addUser(User user){
 		   users.add(user);
-		   try {
+		   /*try {
 				String message = "Usuario cadastrado com sucesso!\n";
 				message += "Nome: " + user.getName();
 				NotificationDialog dialog = new NotificationDialog(2, message);
@@ -32,13 +26,25 @@ public class UserDaoData implements UserDao{
 				dialog.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
+			}*/
 	   }
 	   
 	   @Override
-	   public void deleteUser(User User) {
-	      users.remove(User.getId());
-	      //System.out.println("User: Roll No " + User.getId() + ", deleted from database");
+	   public void deleteUser(User user) {
+		   for(User u : users){
+				  if(user.equals(u)){
+					  users.remove(this);
+					  return;
+				  }
+			  }
+			  try {
+				  String message = "Usuário não cadastrado!";
+				  NotificationDialog dialog = new NotificationDialog(3, message);
+				  dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				  dialog.setVisible(true);
+			  } catch (Exception e) {
+				  e.printStackTrace();
+			  }
 	   }
 
 	   //retrive list of Users from the database
@@ -48,13 +54,40 @@ public class UserDaoData implements UserDao{
 	   }
 
 	   @Override
-	   public User getUser(int id) {
-	      return users.get(id);
+	   public User getUser(String name) {
+		   for(User u : users){
+				  if(name.equals(u.getName())){
+				      return u;
+				  }
+			  }
+			  try {
+				  String message = "Usuário não cadastrado!";
+				  NotificationDialog dialog = new NotificationDialog(3, message);
+				  dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				  dialog.setVisible(true);
+			  } catch (Exception e) {
+				  e.printStackTrace();
+			  }
+			  return null;
 	   }
 
 	   @Override
-	   public void updateUser(User User) {
-	      users.get(User.getId()).setName(User.getName());
-	      //System.out.println("User: Roll No " + User.getId() + ", updated in the database");
+	   public void updateUser(User user) {
+		   for(User u : users){
+			   if(user.equals(u)){
+				   //TODO UPDATE USER
+			   }
+		   }
 	   }
+	   
+	   @Override
+		public String[] getNames() {
+			List<String> nameList = new ArrayList<String>();
+			nameList.add("");
+			for(User u : users){
+				nameList.add(u.getName());
+			}
+			String[] names = new String[nameList.size()];
+			return nameList.toArray(names);
+		}
 }

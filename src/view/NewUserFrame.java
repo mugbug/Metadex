@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import controller.ImageOpener;
 import controller.UserDao;
 import controller.UserDaoData;
 import model.User;
@@ -137,13 +136,13 @@ public class NewUserFrame {
 		
 		JButton btnBack = new JButton("");
 		btnBack.setToolTipText("voltar");
-		btnBack.setPressedIcon(new ImageIcon(NewUserFrame.class.getResource("/view/img/arrow-left-edited.png")));
+		btnBack.setPressedIcon(new ImageIcon(NewUserFrame.class.getResource("/view/img/arrow-leftpressed.png")));
 		btnBack.setContentAreaFilled(false);
 		btnBack.setBorderPainted(false);
 		btnBack.setIcon(new ImageIcon(NewUserFrame.class.getResource("/view/img/arrow-left-edited1.png")));
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				showLogin();
+				NewUserFrame.dispose();
 			}
 		});
 		btnBack.setForeground(Color.DARK_GRAY);
@@ -156,13 +155,15 @@ public class NewUserFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String name = textFieldNome.getText();
 				String email = textFieldEmail.getText();
+				@SuppressWarnings("deprecation")
 				String password_1 = textFieldSenha_1.getText();
+				@SuppressWarnings("deprecation")
 				String password_2 = textFieldSenha_2.getText();
 				if(password_1.equals(password_2)){
 					int id = 0;//pegar do db
 					User user = new User(id, name, email, password_1, icon, 1);
 					UserDao newUser = new UserDaoData();
-					showLogin();
+					NewUserFrame.dispose();
 					newUser.addUser(user);
 				}
 				else {
@@ -189,11 +190,5 @@ public class NewUserFrame {
 		NewUserFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		
-	}
-	
-	public void showLogin(){
-		LoginFrame window = new LoginFrame();
-		window.LoginFrame.setVisible(true);
-		NewUserFrame.dispose();
 	}
 }

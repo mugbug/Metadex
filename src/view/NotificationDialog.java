@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -14,26 +13,15 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.JEditorPane;
-import javax.swing.border.LineBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class NotificationDialog extends JDialog {
 
+	private static final long serialVersionUID = 4695815459953592780L;
+	
 	public final JPanel contentPanel = new JPanel();
-
-	/**
-	 * Launch the application.
-	 
-	public static void main(String[] args) {
-		try {
-			NotificationDialog dialog = new NotificationDialog();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	private boolean okStatus = false;
 
 	/**
 	 * Create the dialog.
@@ -54,6 +42,7 @@ public class NotificationDialog extends JDialog {
 			JButton btnNewButton = new JButton("Cancelar");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					setOkStatus(false);
 					dispose();
 				}
 			});
@@ -69,7 +58,9 @@ public class NotificationDialog extends JDialog {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(type == 1){
-					//atualiza banco de dados
+					//TODO atualiza banco de dados
+					setOkStatus(true);
+					dispose();
 				}else {
 					dispose();
 				}
@@ -121,7 +112,26 @@ public class NotificationDialog extends JDialog {
 			bg.setBounds(0, 0, 369, 163);
 			contentPanel.add(bg);
 		}
-		
-		
 	}
+	
+	public boolean showConfirmDialog(String message){
+		try {
+			//String message = "Promover " + userName + "?";
+			NotificationDialog dialog = new NotificationDialog(1, message);
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return isOkStatus();
+	}
+
+	public boolean isOkStatus() {
+		return okStatus;
+	}
+
+	public void setOkStatus(boolean okStatus) {
+		this.okStatus = okStatus;
+	}
+	
 }

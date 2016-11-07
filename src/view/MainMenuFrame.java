@@ -8,11 +8,13 @@ import javax.swing.JSeparator;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 import java.awt.Component;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -96,6 +98,13 @@ public class MainMenuFrame extends PaneSwitcher{
 	private JLabel lblNomeViewAbility;
 	private JEditorPane lblDescViewAbility;
 	private JEditorPane textFieldDescEditAbility;
+	private JComboBox<String> comboBoxNomeViewUsers;
+	private JLabel lblIdViewUsers;
+	private JLabel lblEmailViewUsers;
+	private JComboBox<String> comboBoxColabViewUsers;
+	private JLabel lblTipoViewUsers;
+	private JLabel lblFotoViewUsers;
+	private JLabel lblFotoProfile;
 	
 	
 //database
@@ -107,6 +116,7 @@ public class MainMenuFrame extends PaneSwitcher{
 //variaveis
 	//metaHuman
 	private ImageIcon iconNewMH = new ImageIcon();
+	private ImageIcon iconEditMH = new ImageIcon();
 	private String nomeNewMH, idadeNewMH, cidadeNewMH, habilidadeNewMH, historiaNewMH;
 	private String nomeViewMH, idadeViewMH, cidadeViewMH, habilidadeViewMH, historiaViewMH;
 	private String nomeEditMH, idadeEditMH, cidadeEditMH, habilidadeEditMH, historiaEditMH;
@@ -118,31 +128,21 @@ public class MainMenuFrame extends PaneSwitcher{
 	private String nomeNewAbility, descNewAbility;
 	private String nomeViewAbility, descViewAbility;
 	private String nomeEditAbility, descEditAbility;
-//tabela
 	
-	/**
-	 * Launch the application.
-	 * 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AdminMenuFrame window = new AdminMenuFrame();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
-
+	
 	/**
 	 * Create the application.
 	 */
 	public MainMenuFrame() {
 		initialize();
+		importData();
 	}
 
+	private void importData(){
+		//user default p/ teste
+		User admin = new User(0, "Pedro", "zaronipedro@outlook.com", "123", null, 1);
+		users.addUser(admin);
+	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -195,9 +195,24 @@ public class MainMenuFrame extends PaneSwitcher{
 		JMenuItem menuItemGerenciar = new JMenuItem("Gerenciar Usu\u00E1rios");
 		menuItemGerenciar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				comboBoxNomeViewUsers.setModel(new DefaultComboBoxModel<String>(users.getNames()));
 				showViewUsers(contentPane);
 			}
 		});
+		
+		JMenuItem menuItemImportar = new JMenuItem("Importar dados");//TODO Importar dados do db
+		menuItemImportar.setMnemonic(KeyEvent.VK_I);
+		menuItemImportar.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		menuItemImportar.setBorder(new EmptyBorder(2, 6, 2, 2));
+		menuItemImportar.setBackground(Color.WHITE);
+		menuArquivo.add(menuItemImportar);
+		
+		JMenuItem menuItemSalvar = new JMenuItem("Salvar");//TODO salvar dados no db
+		menuItemSalvar.setMnemonic(KeyEvent.VK_S);
+		menuItemSalvar.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		menuItemSalvar.setBorder(new EmptyBorder(2, 6, 2, 2));
+		menuItemSalvar.setBackground(Color.WHITE);
+		menuArquivo.add(menuItemSalvar);
 		menuItemGerenciar.setMnemonic(KeyEvent.VK_G);
 		menuItemGerenciar.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		menuItemGerenciar.setBorder(new EmptyBorder(2, 6, 2, 2));
@@ -215,7 +230,7 @@ public class MainMenuFrame extends PaneSwitcher{
 				MainMenuFrame.dispose();
 			}
 		});
-		menuItemSair.setMnemonic(KeyEvent.VK_S);
+		menuItemSair.setMnemonic(KeyEvent.VK_F4);
 		menuItemSair.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		menuItemSair.setBorder(new EmptyBorder(2, 6, 2, 2));
 		menuItemSair.setBackground(Color.WHITE);
@@ -230,6 +245,10 @@ public class MainMenuFrame extends PaneSwitcher{
 		JMenuItem menuItemEditar = new JMenuItem("Editar Perfil");
 		menuItemEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				User u = users.getUser("Pedro");
+				textFieldNomeProfile.setText(u.getName());
+				textFieldEmailProfile.setText(u.getEmail());
+				lblFotoProfile.setIcon(u.getImage());
 				showProfile(contentPane);
 			}
 		});
@@ -432,21 +451,21 @@ public class MainMenuFrame extends PaneSwitcher{
 			@Override
 			public void focusGained(FocusEvent arg0) {
 				labelEditView.setText("Escolha um Meta-Humano:");
-				comboBoxMainMenu.setModel(new DefaultComboBoxModel(metaHumans.getNames()));
+				comboBoxMainMenu.setModel(new DefaultComboBoxModel<String>(metaHumans.getNames()));
 			}
 		});
 		radioButtonC.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
 				labelEditView.setText("Escolha uma Cidade:");
-				comboBoxMainMenu.setModel(new DefaultComboBoxModel(cities.getNames()));
+				comboBoxMainMenu.setModel(new DefaultComboBoxModel<String>(cities.getNames()));
 			}
 		});
 		radioButtonH.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
 				labelEditView.setText("Escolha uma Habilidade:");
-				comboBoxMainMenu.setModel(new DefaultComboBoxModel(abilities.getNames()));
+				comboBoxMainMenu.setModel(new DefaultComboBoxModel<String>(abilities.getNames()));
 			}
 		});
 		
@@ -1032,7 +1051,7 @@ public class MainMenuFrame extends PaneSwitcher{
 		editMHPane.setLayout(null);
 		
 		textFieldNomeEditMH = new JTextField();
-		textFieldNomeEditMH.setText("<nome>");
+		textFieldNomeEditMH.setEditable(false);
 		textFieldNomeEditMH.setSelectionColor(new Color(255, 255, 102));
 		textFieldNomeEditMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		textFieldNomeEditMH.setColumns(10);
@@ -1070,24 +1089,51 @@ public class MainMenuFrame extends PaneSwitcher{
 		editMHPane.add(comboBoxHabilidadeEditMH);
 		
 		btnFotoEditMH = new JButton("Foto");
+		btnFotoEditMH.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+						"Image Files", "jpg", "png", "gif", "jpeg");
+				JFileChooser fc = new JFileChooser();
+				fc.setFileFilter(filter);
+				fc.setCurrentDirectory(new File(System.getProperty("user.home") 
+						+ System.getProperty("file.separator")+ "Desktop" 
+						+ System.getProperty("file.separator")+ "metadex_fotos"));
+				//Handle open button action.
+			    if (arg0.getSource() == btnFotoEditMH) {
+			        int returnVal = fc.showOpenDialog(btnFotoEditMH);
+
+			        if (returnVal == JFileChooser.APPROVE_OPTION) {
+			            File file = fc.getSelectedFile();
+			            //This is where a real application would open the file.
+			            btnFotoEditMH.setText(fc.getName(file)); //altera nome do botao para nome do arquivo
+			            BufferedImage img = null;
+			            try {
+			                img = ImageIO.read(file);
+			            } catch (IOException ioe) {
+			            }
+			            iconEditMH.setImage(img);
+			        }
+			   }
+			}
+		});
 		btnFotoEditMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		btnFotoEditMH.setBorder(null);
 		btnFotoEditMH.setBackground(Color.WHITE);
 		btnFotoEditMH.setBounds(444, 253, 110, 33);
 		editMHPane.add(btnFotoEditMH);
 		
-		JButton btnUpdateEditMH = new JButton("Atualizar");//TODO NOT WORKING
+		JButton btnUpdateEditMH = new JButton("Atualizar");
 		btnUpdateEditMH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//pega os dados para cadastro
+				String prevName = 
 				nomeEditMH = textFieldNomeEditMH.getText();
 				idadeEditMH = textFieldIdadeEditMH.getText();
 				cidadeEditMH = (String) comboBoxCidadeEditMH.getSelectedItem();
 				habilidadeEditMH = (String) comboBoxHabilidadeEditMH.getSelectedItem();
 				historiaEditMH = textFieldHistoriaEditMH.getText();
 				//atualiza metahumano
-				MetaHuman mh = new MetaHuman(nomeEditMH, idadeEditMH, iconNewMH, habilidadeEditMH, cidadeEditMH, historiaEditMH);//TODO ICON 
-				metaHumans.getMetaHuman(nomeEditMH);
+				MetaHuman mh = new MetaHuman(nomeEditMH, idadeEditMH, iconEditMH, habilidadeEditMH, cidadeEditMH, historiaEditMH);//TODO ICON 
 				metaHumans.updateMetaHuman(mh);
 				//volta pro menu principal
 				showMainMenu(contentPane);
@@ -1102,7 +1148,10 @@ public class MainMenuFrame extends PaneSwitcher{
 		JButton btnExcludeEditMH = new JButton("");
 		btnExcludeEditMH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO DELETE MH
+				nomeEditMH = textFieldNomeEditMH.getText();
+				metaHumans.deleteMetaHuman(metaHumans.getMetaHuman(nomeEditMH));
+				comboBoxMainMenu.setModel(new DefaultComboBoxModel<String>(metaHumans.getNames()));
+				showMainMenu(contentPane);
 			}
 		});
 		btnExcludeEditMH.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/trash-iconpressed.png")));
@@ -1195,14 +1244,30 @@ public class MainMenuFrame extends PaneSwitcher{
 		textFieldPaisEditCity.setBounds(197, 243, 238, 21);
 		editCityPane.add(textFieldPaisEditCity);
 		
-		JButton btnUpdateEditCity = new JButton("Atualizar");//TODO UPDATE CITY
+		JButton btnUpdateEditCity = new JButton("Atualizar");
+		btnUpdateEditCity.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nomeEditCity = textFieldNomeEditCity.getText();
+				cities.updateCity(cities.getCity(nomeEditCity));
+				comboBoxMainMenu.setModel(new DefaultComboBoxModel<String>(cities.getNames()));
+				showMainMenu(contentPane);
+			}
+		});
 		btnUpdateEditCity.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		btnUpdateEditCity.setBorder(null);
 		btnUpdateEditCity.setBackground(Color.WHITE);
 		btnUpdateEditCity.setBounds(445, 296, 110, 33);
 		editCityPane.add(btnUpdateEditCity);
 		
-		JButton btnExcludeEditCity = new JButton("");//TODO REMOVE CITY
+		JButton btnExcludeEditCity = new JButton("");
+		btnExcludeEditCity.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				nomeEditCity = textFieldNomeEditCity.getText();
+				cities.deleteCity(cities.getCity(nomeEditCity));
+				comboBoxMainMenu.setModel(new DefaultComboBoxModel<String>(cities.getNames()));
+				showMainMenu(contentPane);
+			}
+		});
 		btnExcludeEditCity.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/trash-iconpressed.png")));
 		btnExcludeEditCity.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/trash-icon.png")));
 		btnExcludeEditCity.setContentAreaFilled(false);
@@ -1273,13 +1338,29 @@ public class MainMenuFrame extends PaneSwitcher{
 		editAbilityPane.add(textFieldDescEditAbility);
 		
 		JButton btnUpdateEditAbility = new JButton("Atualizar");//TODO UPDATE ABILITY
+		btnUpdateEditAbility.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nomeEditAbility = textFieldNomeEditAbility.getText();
+				abilities.updateAbility(abilities.getAbility(nomeEditAbility));
+				comboBoxMainMenu.setModel(new DefaultComboBoxModel<String>(abilities.getNames()));
+				showMainMenu(contentPane);
+			}
+		});
 		btnUpdateEditAbility.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		btnUpdateEditAbility.setBorder(null);
 		btnUpdateEditAbility.setBackground(Color.WHITE);
 		btnUpdateEditAbility.setBounds(445, 296, 110, 33);
 		editAbilityPane.add(btnUpdateEditAbility);
 		
-		JButton btnExcludeEditAbility = new JButton("");//TODO REMOVE ABILITY
+		JButton btnExcludeEditAbility = new JButton("");
+		btnExcludeEditAbility.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nomeEditAbility = textFieldNomeEditAbility.getText();
+				abilities.deleteAbility(abilities.getAbility(nomeEditAbility));
+				comboBoxMainMenu.setModel(new DefaultComboBoxModel<String>(abilities.getNames()));
+				showMainMenu(contentPane);
+			}
+		});
 		btnExcludeEditAbility.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/trash-iconpressed.png")));
 		btnExcludeEditAbility.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/trash-icon.png")));
 		btnExcludeEditAbility.setContentAreaFilled(false);
@@ -1361,7 +1442,7 @@ public class MainMenuFrame extends PaneSwitcher{
 		btnEditFotoProfile.setBounds(53, 296, 32, 32);
 		profilePane.add(btnEditFotoProfile);
 		
-		JLabel lblFotoProfile = new JLabel("Foto 150x150");
+		lblFotoProfile = new JLabel("Foto 150x150");
 		lblFotoProfile.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFotoProfile.setForeground(Color.WHITE);
 		lblFotoProfile.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
@@ -1493,37 +1574,59 @@ public class MainMenuFrame extends PaneSwitcher{
 		contentPane.add(viewUsersPane, "ViewUsers");
 		viewUsersPane.setLayout(null);
 		
-		JComboBox<String> comboBoxNomeViewUsers = new JComboBox<String>();
+		comboBoxNomeViewUsers = new JComboBox<String>();
+		comboBoxNomeViewUsers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String userName = (String) comboBoxNomeViewUsers.getSelectedItem();
+				if(userName != ""){
+					User u = users.getUser(userName);
+					lblIdViewUsers.setText(Integer.toString(u.getId()));
+					lblEmailViewUsers.setText(u.getEmail());
+					//comboBoxColabViewUsers.setModel(null);//TODO get colab
+					lblFotoViewUsers.setIcon(null);//TODO set icon
+					if(u.getLevel()==1){
+						lblTipoViewUsers.setText("Normal User");
+					}
+					else{
+						lblTipoViewUsers.setText("Admin User");
+					}
+					
+				}
+				else {
+					clearViewUsers();
+				}
+			}
+		});
 		comboBoxNomeViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		comboBoxNomeViewUsers.setBackground(Color.WHITE);
 		comboBoxNomeViewUsers.setBounds(316, 179, 202, 21);
 		viewUsersPane.add(comboBoxNomeViewUsers);
 		
-		JLabel lblIdViewUsers = new JLabel("<id>");
+		lblIdViewUsers = new JLabel("");
 		lblIdViewUsers.setForeground(Color.BLACK);
 		lblIdViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		lblIdViewUsers.setBounds(316, 210, 202, 21);
 		viewUsersPane.add(lblIdViewUsers);
 		
-		JLabel lblEmailViewUsers = new JLabel("<email>");
+		lblEmailViewUsers = new JLabel("");
 		lblEmailViewUsers.setForeground(Color.BLACK);
 		lblEmailViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		lblEmailViewUsers.setBounds(314, 242, 202, 21);
 		viewUsersPane.add(lblEmailViewUsers);
 		
-		JComboBox comboBoxColabViewUsers = new JComboBox();
+		comboBoxColabViewUsers = new JComboBox<String>();
 		comboBoxColabViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		comboBoxColabViewUsers.setBackground(Color.WHITE);
 		comboBoxColabViewUsers.setBounds(316, 274, 202, 21);
 		viewUsersPane.add(comboBoxColabViewUsers);
 		
-		JLabel lblTipoViewUsers = new JLabel("<user ou admin>");
+		lblTipoViewUsers = new JLabel("");
 		lblTipoViewUsers.setForeground(Color.BLACK);
 		lblTipoViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		lblTipoViewUsers.setBounds(316, 306, 202, 21);
 		viewUsersPane.add(lblTipoViewUsers);
 		
-		JLabel lblFotoViewUsers = new JLabel("Foto 150x150");
+		lblFotoViewUsers = new JLabel("Foto 150x150");
 		lblFotoViewUsers.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFotoViewUsers.setForeground(Color.WHITE);
 		lblFotoViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
@@ -1533,6 +1636,20 @@ public class MainMenuFrame extends PaneSwitcher{
 		viewUsersPane.add(lblFotoViewUsers);
 		
 		JButton btnPromoteViewUsers = new JButton("");
+		btnPromoteViewUsers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String userName = (String) comboBoxNomeViewUsers.getSelectedItem();
+				String message = "Promover " + userName + "?";
+				JOptionPane dialog = new JOptionPane();
+				int ans = JOptionPane.showConfirmDialog(dialog, message, "Confirmação", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+				//NotificationDialog dialog = new NotificationDialog(1, message);
+				//boolean ans = dialog.showConfirmDialog(message);
+				if(ans == JOptionPane.YES_OPTION){
+					users.getUser(userName).setLevel(2);
+					lblTipoViewUsers.setText("Admin User");
+				}
+			}
+		});
 		btnPromoteViewUsers.setPressedIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/crown-iconpressed.png")));
 		btnPromoteViewUsers.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/crown-icon.png")));
 		btnPromoteViewUsers.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
@@ -1563,6 +1680,7 @@ public class MainMenuFrame extends PaneSwitcher{
 		viewUsersPane.add(btnBackViewUsers);
 		btnBackViewUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				clearViewUsers();
 				showMainMenu(contentPane);
 			}
 		});
@@ -1616,7 +1734,7 @@ public class MainMenuFrame extends PaneSwitcher{
 		bgViewUsers.setBounds(0, 0, 603, 370);
 		viewUsersPane.add(bgViewUsers);
 	}
-	public DefaultTableModel getTableData(){
+	private DefaultTableModel getTableData(){
 		String col[] = {"Nome", "Cidade", "Habilidade"};
 		DefaultTableModel tableModel = new DefaultTableModel(col, metaHumans.getAllmetaHumans().size());
 		for(int i=0;i<metaHumans.getAllmetaHumans().size();i++){
@@ -1629,7 +1747,7 @@ public class MainMenuFrame extends PaneSwitcher{
 		}
 		return tableModel;
 	}
-	public int getComboBoxIndex(int type, String name){
+	private int getComboBoxIndex(int type, String name){
 		int index = 0;
 		if(type == 1){//city
 			for(String city : cities.getNames()){
@@ -1648,5 +1766,13 @@ public class MainMenuFrame extends PaneSwitcher{
 			}
 		}
 		return -1;
+	}
+	
+	private void clearViewUsers(){
+		comboBoxNomeViewUsers.setSelectedIndex(0);
+		lblIdViewUsers.setText(null);
+		lblEmailViewUsers.setText(null);
+		lblFotoViewUsers.setIcon(null);
+		lblTipoViewUsers.setText(null);
 	}
 }
