@@ -1,11 +1,11 @@
 package model;
 
-import java.awt.image.BufferedImage;
+import javax.swing.ImageIcon;
 
 public class Admin extends User{
 
-	public Admin(String name, String email, String password, BufferedImage image, int level) {
-		super(name, email, password, image, level);
+	public Admin(int id, String name, String email, String password, ImageIcon image, int level) {
+		super(id, name, email, password, image, level);
 	}
 	
 	//métodos 

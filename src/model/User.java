@@ -1,8 +1,8 @@
 package model;
 
 
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
 
 
 public class User {
@@ -10,11 +10,12 @@ public class User {
 	private int id;
 	private String email;
 	private String password;
-	private BufferedImage image;
+	private ImageIcon image;
 	private int level = 2; //1-normal user/2-admin
-	private ArrayList<Integer> contributedIn = new ArrayList<>();
+	//contributedIn list
 	
-	public User(String name, String email, String password, BufferedImage image, int level) {
+	public User(int id, String name, String email, String password, ImageIcon image, int level) {
+		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
@@ -57,21 +58,21 @@ public class User {
 	public void setLevel(int level) {
 		this.level = level; //1 ou 2
 	}
-	public BufferedImage getImage() {
+	public ImageIcon getImage() {
 		return image;
 	}
-	public void setImage(BufferedImage image) {
+	public void setImage(ImageIcon image) {
 		this.image = image;
 	}
 	
 	/*-------  Metodos  -----*/
 	
 	public void addContribution(int id){
-		this.contributedIn.add(id);
+		//TODO
 	}
 	
 	public void getContributions(){
-		//idk
+		//TODO
 	}
 	
 	@Override

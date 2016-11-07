@@ -1,18 +1,19 @@
 package model;
 
-import java.awt.image.BufferedImage;
+
+import javax.swing.ImageIcon;
 
 public class MetaHuman {
 	private String name;
 	private int id;
-	private int age;
-	private BufferedImage image;
-	private Ability ability;
-	private City homeTown;
+	private String age;
+	private ImageIcon image;
+	private String ability;
+	private String homeTown;
 	private String history;
 	
 	
-	public MetaHuman(String name, int age, BufferedImage image, Ability ability, City homeTown, String history) {
+	public MetaHuman(String name, String age, ImageIcon image, String ability, String homeTown, String history) {
 		this.name = name;
 		this.age = age;
 		this.image = image;
@@ -33,22 +34,22 @@ public class MetaHuman {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getAge() {
+	public String getAge() {
 		return age;
 	}
-	public void setAge(int age) {
+	public void setAge(String age) {
 		this.age = age;
 	}
-	public Ability getHability() {
+	public String getHability() {
 		return ability;
 	}
-	public void setHability(Ability ability) {
+	public void setHability(String ability) {
 		this.ability = ability;
 	}
-	public City getHomeTown() {
+	public String getHomeTown() {
 		return homeTown;
 	}
-	public void setHomeTown(City homeTown) {
+	public void setHomeTown(String homeTown) {
 		this.homeTown = homeTown;
 	}
 	public String getHistory() {
@@ -57,10 +58,10 @@ public class MetaHuman {
 	public void setHistory(String history) {
 		this.history = history;
 	}
-	public BufferedImage getImage() {
+	public ImageIcon getImage() {
 		return image;
 	}
-	public void setImage(BufferedImage image) {
+	public void setImage(ImageIcon image) {
 		this.image = image;
 	}
 	

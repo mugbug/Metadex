@@ -15,9 +15,12 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+
+import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.Toolkit;
@@ -26,6 +29,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
+
 import java.awt.Panel;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -33,9 +38,19 @@ import javax.swing.SwingConstants;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import controller.ImageOpener;
+import controller.MetaHumanDao;
+import controller.MetaHumanDaoData;
 import controller.PaneSwitcher;
+import controller.UserDao;
+import controller.UserDaoData;
+import model.MetaHuman;
+import model.User;
 
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class MainMenuFrame extends PaneSwitcher{
 
@@ -57,7 +72,31 @@ public class MainMenuFrame extends PaneSwitcher{
 	private JTextField textFieldSenhaAtualProfile;
 	private JTextField textFieldNovaSenhaProfile_1;
 	private JTextField textFieldNovaSenhaProfile_2;
-
+	private JLabel lblNomeViewMH;
+	private JEditorPane textFieldHistoriaEditMH;
+	private JComboBox comboBoxHabilidadeEditMH;
+	private JComboBox comboBoxCidadeEditMH;
+	private JButton btnFotoEditMH;
+	private JEditorPane editorPaneHistoriaViewMH;
+	private JLabel lblCidadeViewMH;
+	private JLabel lblHabilidadeViewMH;
+	private JLabel lblFotoViewMH;
+	private JComboBox comboBoxHabilidadeNewMH;
+	private JComboBox comboBoxCidadeNewMH;
+	
+	private MetaHumanDao metaHumans = new MetaHumanDaoData();
+	
+	//variaveis
+	private ImageIcon iconNewMH = new ImageIcon();
+	String nomeNewMH, idadeNewMH, cidadeNewMH, habilidadeNewMH, historiaNewMH;
+	String nomeViewMH, idadeViewMH, cidadeViewMH, habilidadeViewMH, historiaViewMH;
+	String nomeEditMH, idadeEditMH, cidadeEditMH, habilidadeEditMH, historiaEditMH;
+	String nomeNewCity, idadeNewCity, cidadeNewCity, habilidadeNewCity, historiaNewCity;
+	String nomeViewCity, idadeViewCity, cidadeViewCity, habilidadeViewCity, historiaViewCity;
+	String nomeEditCity, idadeEditCity, cidadeEditCity, habilidadeEditCity, historiaEditCity;
+	String nomeNewAbility, idadeNewAbility, cidadeNewAbility, habilidadeNewAbility, historiaNewAbility;
+	String nomeViewAbility, idadeViewAbility, cidadeViewAbility, habilidadeViewAbility, historiaViewAbility;
+	String nomeEditAbility, idadeEditAbility, cidadeEditAbility, habilidadeEditAbility, historiaEditAbility;
 	/**
 	 * Launch the application.
 	 * 
@@ -84,7 +123,9 @@ public class MainMenuFrame extends PaneSwitcher{
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	@SuppressWarnings("null")
 	private void initialize() {
+		
 		MainMenuFrame = new JFrame();
 		MainMenuFrame.getContentPane().setBackground(Color.WHITE);
 		MainMenuFrame.setBackground(Color.WHITE);
@@ -212,29 +253,35 @@ public class MainMenuFrame extends PaneSwitcher{
 		buttonGroup.add(radioButtonC);
 		buttonGroup.add(radioButtonH);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(318, 256, 238, 33);
-		mainMenuPane.add(comboBox);
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"<lista de meta-humanos>", "ou", "<lista de cidades>"}));
-		comboBox.setBackground(Color.WHITE);
-		comboBox.setBorder(null);
-		comboBox.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		JComboBox comboBoxMainMenu = new JComboBox();
+		comboBoxMainMenu.setBounds(318, 256, 238, 33);
+		mainMenuPane.add(comboBoxMainMenu);
+		comboBoxMainMenu.setModel(new DefaultComboBoxModel(new String[] {"Virgil", "ou", "<lista de cidades>"}));
+		comboBoxMainMenu.setBackground(Color.WHITE);
+		comboBoxMainMenu.setBorder(null);
+		comboBoxMainMenu.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		
 		JButton btnEdit = new JButton("Editar");
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(radioButtonMH.isSelected()){
+					nomeEditMH = (String)comboBoxMainMenu.getSelectedItem();
+					MetaHuman mh = metaHumans.getMetaHuman(nomeEditMH);
+					textFieldNomeEditMH.setText(nomeEditMH);
+					textFieldIdadeEditMH.setText(mh.getAge());
+					textFieldHistoriaEditMH.setText(mh.getHistory());
+					comboBoxCidadeEditMH.setSelectedIndex(-1);
+					comboBoxHabilidadeEditMH.setSelectedIndex(-1);
+					btnFotoEditMH.setIcon(mh.getImage());
 					showEditMH(contentPane);
 				}
 				else if(radioButtonC.isSelected()){
+					textFieldNomeEditCity.setText((String)comboBoxMainMenu.getSelectedItem());
 					showEditCity(contentPane);
 				}
 				else if(radioButtonH.isSelected()){
+					textFieldNomeEditAbility.setText((String)comboBoxMainMenu.getSelectedItem());
 					showEditAbility(contentPane);
-				}
-				else {
-					String message = "Selecione um tipo!";
-					JOptionPane.showMessageDialog(MainMenuFrame, message, "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -248,12 +295,23 @@ public class MainMenuFrame extends PaneSwitcher{
 		btnView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(radioButtonMH.isSelected()){
+					nomeViewMH = (String) comboBoxMainMenu.getSelectedItem();
+					MetaHuman mh = metaHumans.getMetaHuman(nomeViewMH);
+					idadeViewMH = mh.getAge();
+					lblNomeViewMH.setText(nomeViewMH + ", " + idadeViewMH);
+					editorPaneHistoriaViewMH.setText(mh.getHistory());
+					lblHabilidadeViewMH.setText(mh.getHability());
+					lblCidadeViewMH.setText(mh.getHomeTown());
+					lblFotoViewMH.setText(null);
+					lblFotoViewMH.setIcon(mh.getImage());
 					showViewMH(contentPane);
 				}
 				else if(radioButtonC.isSelected()){
+					nomeViewCity = (String) comboBoxMainMenu.getSelectedItem();
 					showViewCity(contentPane);
 				}
 				else if(radioButtonH.isSelected()){
+					nomeViewAbility = (String) comboBoxMainMenu.getSelectedItem();
 					showViewAbility(contentPane);
 				}
 				else {
@@ -281,18 +339,18 @@ public class MainMenuFrame extends PaneSwitcher{
 		mainMenuPane.add(btnRegister);
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				String nome = textFieldRegister.getText();
 				if(radioButtonMH.isSelected()){
+					textFieldNomeNewMH.setText(nome);
 					showNewMH(contentPane);
 				}
 				else if(radioButtonC.isSelected()){
+					textFieldNomeNewCity.setText(nome);
 					showNewCity(contentPane);
 				}
 				else if(radioButtonH.isSelected()){
+					textFieldNomeNewAbility.setText(nome);
 					showNewAbility(contentPane);
-				}
-				else {
-					String message = "Selecione um tipo!";
-					JOptionPane.showMessageDialog(MainMenuFrame, message, "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -433,12 +491,39 @@ public class MainMenuFrame extends PaneSwitcher{
 		lblHistria.setBounds(49, 225, 43, 21);
 		newMHPane.add(lblHistria);
 		
-		JButton btnFoto = new JButton("Foto");
-		btnFoto.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
-		btnFoto.setBorder(null);
-		btnFoto.setBackground(Color.WHITE);
-		btnFoto.setBounds(444, 253, 110, 33);
-		newMHPane.add(btnFoto);
+		JButton btnFotoNewMH = new JButton("Foto");
+		btnFotoNewMH.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+						"Image Files", "jpg", "png", "gif", "jpeg");
+				JFileChooser fc = new JFileChooser();
+				fc.setFileFilter(filter);
+				fc.setCurrentDirectory(new File(System.getProperty("user.home") 
+						+ System.getProperty("file.separator")+ "Desktop" 
+						+ System.getProperty("file.separator")+ "metadex_fotos"));
+				//Handle open button action.
+			    if (arg0.getSource() == btnFotoNewMH) {
+			        int returnVal = fc.showOpenDialog(btnFotoNewMH);
+
+			        if (returnVal == JFileChooser.APPROVE_OPTION) {
+			            File file = fc.getSelectedFile();
+			            //This is where a real application would open the file.
+			            btnFotoNewMH.setText(fc.getName(file)); //altera nome do botao para nome do arquivo
+			            BufferedImage img = null;
+			            try {
+			                img = ImageIO.read(file);
+			            } catch (IOException ioe) {
+			            }
+			            iconNewMH.setImage(img);
+			        }
+			   }
+			}
+		});
+		btnFotoNewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
+		btnFotoNewMH.setBorder(null);
+		btnFotoNewMH.setBackground(Color.WHITE);
+		btnFotoNewMH.setBounds(444, 253, 110, 33);
+		newMHPane.add(btnFotoNewMH);
 		
 		textFieldIdadeNewMH = new JTextField();
 		textFieldIdadeNewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
@@ -448,22 +533,43 @@ public class MainMenuFrame extends PaneSwitcher{
 		textFieldIdadeNewMH.setBounds(119, 198, 152, 21);
 		newMHPane.add(textFieldIdadeNewMH);
 		
-		JEditorPane editorPaneHistoriaNewMH = new JEditorPane();
-		editorPaneHistoriaNewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
-		editorPaneHistoriaNewMH.setBounds(44, 253, 390, 75);
-		newMHPane.add(editorPaneHistoriaNewMH);
+		JEditorPane textFieldHistoriaNewMH = new JEditorPane();
+		textFieldHistoriaNewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
+		textFieldHistoriaNewMH.setBounds(44, 253, 390, 75);
+		newMHPane.add(textFieldHistoriaNewMH);
 		
-		JComboBox comboBoxCidadeNewMH = new JComboBox();
+		comboBoxCidadeNewMH = new JComboBox();
+		comboBoxCidadeNewMH.setModel(new DefaultComboBoxModel(new String[] {"Dakota"}));
 		comboBoxCidadeNewMH.setBackground(Color.WHITE);
 		comboBoxCidadeNewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		comboBoxCidadeNewMH.setBounds(402, 171, 152, 21);
 		newMHPane.add(comboBoxCidadeNewMH);
 		
-		JComboBox comboBoxHabilidadeNewMH = new JComboBox();
+		comboBoxHabilidadeNewMH = new JComboBox();
+		comboBoxHabilidadeNewMH.setModel(new DefaultComboBoxModel(new String[] {"Choque do whatever"}));
 		comboBoxHabilidadeNewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		comboBoxHabilidadeNewMH.setBackground(Color.WHITE);
 		comboBoxHabilidadeNewMH.setBounds(402, 198, 152, 21);
 		newMHPane.add(comboBoxHabilidadeNewMH);
+		
+		btnRegisterNewMH.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				nomeNewMH = textFieldNomeNewMH.getText();
+				idadeNewMH = textFieldIdadeNewMH.getText();
+				cidadeNewMH = comboBoxCidadeNewMH.getName();
+				habilidadeNewMH = comboBoxHabilidadeNewMH.getName();
+				historiaNewMH = textFieldHistoriaNewMH.getText();
+				MetaHuman mh = new MetaHuman(nomeNewMH, idadeNewMH, iconNewMH, habilidadeNewMH, cidadeNewMH, historiaNewMH);
+				metaHumans.addMetaHuman(mh);
+				textFieldNomeNewMH.setText(null);
+				textFieldIdadeNewMH.setText(null);
+				comboBoxCidadeNewMH.setSelectedIndex(-1);
+				comboBoxHabilidadeNewMH.setSelectedIndex(-1);
+				btnFotoNewMH.setText("Foto");
+				textFieldHistoriaNewMH.setText(null);
+				showMainMenu(contentPane);
+			}
+		});
 		
 		JLabel bgNewMH = new JLabel("");
 		bgNewMH.setIcon(new ImageIcon(MainMenuFrame.class.getResource("/view/img/bg-base.jpg")));
@@ -611,11 +717,11 @@ public class MainMenuFrame extends PaneSwitcher{
 		btnBackViewMH.setBounds(0, 0, 32, 32);
 		viewMHPane.add(btnBackViewMH);
 		
-		JLabel lblNomeIdadeViewMH = new JLabel("<nome>, <idade>");
-		lblNomeIdadeViewMH.setForeground(Color.GRAY);
-		lblNomeIdadeViewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 20));
-		lblNomeIdadeViewMH.setBounds(42, 121, 392, 28);
-		viewMHPane.add(lblNomeIdadeViewMH);
+		lblNomeViewMH = new JLabel();
+		lblNomeViewMH.setForeground(Color.GRAY);
+		lblNomeViewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 20));
+		lblNomeViewMH.setBounds(42, 121, 392, 28);
+		viewMHPane.add(lblNomeViewMH);
 		
 		JSeparator separator_5 = new JSeparator();
 		separator_5.setName("Menu Principal");
@@ -651,28 +757,28 @@ public class MainMenuFrame extends PaneSwitcher{
 		label_9.setBounds(213, 171, 43, 21);
 		viewMHPane.add(label_9);
 		
-		JLabel lblCidadeViewMH = new JLabel("<cidade>");
+		lblCidadeViewMH = new JLabel("<cidade>");
 		lblCidadeViewMH.setForeground(Color.BLACK);
 		lblCidadeViewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		lblCidadeViewMH.setBounds(314, 283, 238, 21);
 		viewMHPane.add(lblCidadeViewMH);
 		
-		JLabel lblHabilidadeViewMH = new JLabel("<habilidade>");
+		lblHabilidadeViewMH = new JLabel("<habilidade>");
 		lblHabilidadeViewMH.setForeground(Color.BLACK);
 		lblHabilidadeViewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		lblHabilidadeViewMH.setBounds(314, 308, 240, 21);
 		viewMHPane.add(lblHabilidadeViewMH);
 		
-		JLabel lblFoto = new JLabel("Foto 150x150");
-		lblFoto.setBackground(Color.DARK_GRAY);
-		lblFoto.setBorder(new EmptyBorder(1, 1, 1, 1));
-		lblFoto.setHorizontalAlignment(SwingConstants.CENTER);
-		lblFoto.setForeground(Color.WHITE);
-		lblFoto.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
-		lblFoto.setBounds(53, 178, 150, 150);
-		viewMHPane.add(lblFoto);
+		lblFotoViewMH = new JLabel("Foto 150x150");
+		lblFotoViewMH.setBackground(Color.DARK_GRAY);
+		lblFotoViewMH.setBorder(new EmptyBorder(1, 1, 1, 1));
+		lblFotoViewMH.setHorizontalAlignment(SwingConstants.CENTER);
+		lblFotoViewMH.setForeground(Color.WHITE);
+		lblFotoViewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
+		lblFotoViewMH.setBounds(53, 178, 150, 150);
+		viewMHPane.add(lblFotoViewMH);
 		
-		JEditorPane editorPaneHistoriaViewMH = new JEditorPane();
+		editorPaneHistoriaViewMH = new JEditorPane();
 		editorPaneHistoriaViewMH.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		editorPaneHistoriaViewMH.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
 		editorPaneHistoriaViewMH.setEditable(false);
@@ -866,7 +972,7 @@ public class MainMenuFrame extends PaneSwitcher{
 		label_18.setBounds(49, 225, 43, 21);
 		editMHPane.add(label_18);
 		
-		JButton btnFotoEditMH = new JButton("Foto");
+		btnFotoEditMH = new JButton("Foto");
 		btnFotoEditMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		btnFotoEditMH.setBorder(null);
 		btnFotoEditMH.setBackground(Color.WHITE);
@@ -891,19 +997,19 @@ public class MainMenuFrame extends PaneSwitcher{
 		textFieldIdadeEditMH.setBounds(119, 198, 152, 21);
 		editMHPane.add(textFieldIdadeEditMH);
 		
-		JEditorPane textFieldHistoriaEditMH = new JEditorPane();
+		textFieldHistoriaEditMH = new JEditorPane();
 		textFieldHistoriaEditMH.setFont(new Font("Nirmala UI", Font.PLAIN, 11));
 		textFieldHistoriaEditMH.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ");
 		textFieldHistoriaEditMH.setBounds(44, 253, 390, 75);
 		editMHPane.add(textFieldHistoriaEditMH);
 		
-		JComboBox comboBoxCidadeEditMH = new JComboBox();
+		comboBoxCidadeEditMH = new JComboBox();
 		comboBoxCidadeEditMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		comboBoxCidadeEditMH.setBackground(Color.WHITE);
 		comboBoxCidadeEditMH.setBounds(402, 171, 152, 21);
 		editMHPane.add(comboBoxCidadeEditMH);
 		
-		JComboBox comboBoxHabilidadeEditMH = new JComboBox();
+		comboBoxHabilidadeEditMH = new JComboBox();
 		comboBoxHabilidadeEditMH.setFont(new Font("Nirmala UI", Font.PLAIN, 12));
 		comboBoxHabilidadeEditMH.setBackground(Color.WHITE);
 		comboBoxHabilidadeEditMH.setBounds(402, 198, 152, 21);
@@ -1070,6 +1176,13 @@ public class MainMenuFrame extends PaneSwitcher{
 		bgEditAbility.setBounds(0, 0, 603, 370);
 		editAbilityPane.add(bgEditAbility);
 		
+		//profilePane
+		//TODO teste
+		/*
+		UserDao user = new UserDaoData();
+		User profile = user.getUser(0);
+		*/
+		
 		JPanel profilePane = new JPanel();
 		contentPane.add(profilePane, "Profile");
 		profilePane.setLayout(null);
@@ -1166,6 +1279,7 @@ public class MainMenuFrame extends PaneSwitcher{
 		textFieldNomeProfile.setBackground(Color.WHITE);
 		textFieldNomeProfile.setBounds(291, 171, 210, 21);
 		profilePane.add(textFieldNomeProfile);
+		
 		
 		textFieldEmailProfile = new JTextField();
 		textFieldEmailProfile.setSelectionColor(new Color(255, 255, 102));

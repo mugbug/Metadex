@@ -22,6 +22,10 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.UIManager;
+
+import controller.UserDao;
+import controller.UserDaoData;
+
 import java.awt.Rectangle;
 import javax.swing.SwingConstants;
 import java.awt.event.KeyAdapter;
@@ -169,5 +173,7 @@ public class LoginFrame {
 		label.setBounds(-13, -2, 290, 327);
 		label.setIcon(new ImageIcon(LoginFrame.class.getResource("/view/img/login.jpg")));
 		LoginFrame.getContentPane().add(label);
+		
+		
 	}
 }
