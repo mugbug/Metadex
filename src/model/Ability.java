@@ -22,5 +22,11 @@ public class Ability {
 		this.description = description;
 	}
 	
-	
+	@Override
+	public String toString() {
+		if(this.name == null) this.name = " ";
+		if(this.description == null) this.description = " ";
+		String data = this.name+"_"+this.description+"\n";
+		return data;
+	}
 }

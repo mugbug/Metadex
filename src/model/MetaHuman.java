@@ -65,5 +65,14 @@ public class MetaHuman {
 		this.image = image;
 	}
 	
-	
+	@Override
+	public String toString() {
+		if(this.name == null) this.name = " ";
+		if(this.age == null) this.age = " ";
+		if(this.ability == null) this.ability = " ";
+		if(this.homeTown == null) this.homeTown = " ";
+		if(this.history == null) this.history = " ";
+		String data = this.name+"_"+this.age+"_"+this.ability+"_"+this.homeTown+"_"+this.history+"\n";
+		return data;
+	}
 }

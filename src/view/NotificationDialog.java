@@ -21,12 +21,12 @@ public class NotificationDialog extends JDialog {
 	private static final long serialVersionUID = 4695815459953592780L;
 	
 	public final JPanel contentPanel = new JPanel();
-	private boolean okStatus = false;
 
 	/**
 	 * Create the dialog.
 	 */
-	public NotificationDialog(int type, String message) { //tipo: 1.Confirm | 2. Notify | 3. Error
+	public NotificationDialog(int type, String message) {
+		setAlwaysOnTop(true); //tipo: 1.Confirm | 2. Notify | 3. Error
 		setTitle("Metadex");
 		setResizable(false);
 		setFont(new Font("Nirmala UI", Font.PLAIN, 12));
@@ -42,7 +42,6 @@ public class NotificationDialog extends JDialog {
 			JButton btnNewButton = new JButton("Cancelar");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					setOkStatus(false);
 					dispose();
 				}
 			});
@@ -59,7 +58,6 @@ public class NotificationDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				if(type == 1){
 					//TODO atualiza banco de dados
-					setOkStatus(true);
 					dispose();
 				}else {
 					dispose();
@@ -112,26 +110,7 @@ public class NotificationDialog extends JDialog {
 			bg.setBounds(0, 0, 369, 163);
 			contentPanel.add(bg);
 		}
+		
+		
 	}
-	
-	public boolean showConfirmDialog(String message){
-		try {
-			//String message = "Promover " + userName + "?";
-			NotificationDialog dialog = new NotificationDialog(1, message);
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return isOkStatus();
-	}
-
-	public boolean isOkStatus() {
-		return okStatus;
-	}
-
-	public void setOkStatus(boolean okStatus) {
-		this.okStatus = okStatus;
-	}
-	
 }

@@ -17,6 +17,10 @@ import model.User;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 
 public class LoginFrame {
@@ -27,18 +31,38 @@ public class LoginFrame {
 	
 //pega usuarios no banco
 	private UserDao users = new UserDaoData();
-	
-	
 	/**
 	 * Create the application.
 	 */
 	public LoginFrame() {
 		initialize();
-		importUsers();
 	}
 	private void importUsers(){
-		User admin = new User("admin", "admin");//user default p/ teste
-		users.addUser(admin);
+		User u;
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("users.txt"));
+			StringBuilder sb = new StringBuilder();
+		    String line = br.readLine();
+		    while (line != null) {
+		    	String[] user = line.split("_");
+		    	String name = user[0];
+		    	String password = user[1];
+		    	int level = Integer.parseInt(user[2]);
+		    	String email = user[3];
+		    	u = new User(name,email,password,null,level);
+		    	users.addUser(u);
+		        sb.append(line);
+		        sb.append(System.lineSeparator());
+		        line = br.readLine();
+		    }
+		    br.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * Initialize the contents of the frame.
@@ -100,17 +124,20 @@ public class LoginFrame {
 		
 		btnEntrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				importUsers();
 				@SuppressWarnings("deprecation")
 				User user = new User(txtEmail.getText(), passwordField.getText());
 				for(User expected : users.getAllUsers()){
 					if(user.equals(expected)){
+						MainMenuFrame window = new MainMenuFrame();
+						window.setOnlineUser(expected);
 						if(user.getLevel() == 2){
 							//menu admin
 							try {
-								MainMenuFrame window = new MainMenuFrame();
 								window.MainMenuFrame.setTitle("Metadex (admin)");
 								window.MainMenuFrame.setVisible(true);
 								LoginFrame.dispose();
+								return;
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -118,26 +145,26 @@ public class LoginFrame {
 						else if(user.getLevel() == 1){
 							//menu normal user
 							try {
-								MainMenuFrame window = new MainMenuFrame();
 								window.MainMenuFrame.setTitle("Metadex");
 								window.MainMenuFrame.setVisible(true);
 								LoginFrame.dispose();
+								return;
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
 						}
 					}
-					else{
-						try {
-							String message = "Email ou senha inválidos!";
-							NotificationDialog dialog = new NotificationDialog(3, message);
-							dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-							dialog.setVisible(true);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
 				}
+				
+				try {
+					String message = "Email ou senha inválidos!";
+					NotificationDialog dialog = new NotificationDialog(3, message);
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
 			}
 		});
 		

@@ -36,8 +36,8 @@ public class CityDaoData implements CityDao{
 			  if(city.getName().equals(c.getName())){
 				  cities.remove(index);
 				  try {
-					  String message = "Cidade <"+c.getName()+">\nremovida!";
-					  NotificationDialog dialog = new NotificationDialog(3, message);
+					  String message = "Cidade '"+c.getName()+"'\nremovida!";
+					  NotificationDialog dialog = new NotificationDialog(2, message);
 					  dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					  dialog.setVisible(true);
 				  } catch (Exception e) {
@@ -103,7 +103,7 @@ public class CityDaoData implements CityDao{
 	@Override
 	public String[] getNames() {
 		List<String> nameList = new ArrayList<String>();
-		nameList.add("");
+		nameList.add(" ");
 		for(City c : cities){
 			nameList.add(c.getName());
 		}

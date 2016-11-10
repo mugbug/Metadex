@@ -18,33 +18,34 @@ public class UserDaoData implements UserDao{
 	   @Override
 	   public void addUser(User user){
 		   users.add(user);
-		   /*try {
-				String message = "Usuario cadastrado com sucesso!\n";
-				message += "Nome: " + user.getName();
-				NotificationDialog dialog = new NotificationDialog(2, message);
-				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-				dialog.setVisible(true);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}*/
 	   }
 	   
 	   @Override
 	   public void deleteUser(User user) {
+		   int index=0;
 		   for(User u : users){
-				  if(user.equals(u)){
-					  users.remove(this);
-					  return;
+			  if(user.getName().equals(u.getName())){
+				  users.remove(index);
+				  try {
+					  String message = "Usuário '"+u.getName()+"' removido!";
+					  NotificationDialog dialog = new NotificationDialog(2, message);
+					  dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					  dialog.setVisible(true);
+				  } catch (Exception e) {
+					  e.printStackTrace();
 				  }
+				  return;
 			  }
-			  try {
-				  String message = "Usuário não cadastrado!";
-				  NotificationDialog dialog = new NotificationDialog(3, message);
-				  dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-				  dialog.setVisible(true);
-			  } catch (Exception e) {
-				  e.printStackTrace();
-			  }
+			  index++;
+		  }
+		  try {
+			  String message = "Usuário não pôde ser\nremovido!";
+			  NotificationDialog dialog = new NotificationDialog(3, message);
+			  dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			  dialog.setVisible(true);
+		  } catch (Exception e) {
+			  e.printStackTrace();
+		  }
 	   }
 
 	   //retrive list of Users from the database
@@ -75,7 +76,20 @@ public class UserDaoData implements UserDao{
 	   public void updateUser(User user) {
 		   for(User u : users){
 			   if(user.equals(u)){
-				   //TODO UPDATE USER
+				   u.setName(user.getName());
+				   u.setEmail(u.getEmail());
+				   u.setLevel(u.getLevel());
+				   u.setPassword(u.getPassword());
+				   u.setImage(u.getImage());
+				   try {
+					   String message = "Usuário foi atualizado!";
+					   NotificationDialog dialog = new NotificationDialog(2, message);
+					   dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					   dialog.setVisible(true);
+				   } catch (Exception e) {
+					   e.printStackTrace();
+				   }
+				   return;
 			   }
 		   }
 	   }
@@ -89,5 +103,16 @@ public class UserDaoData implements UserDao{
 			}
 			String[] names = new String[nameList.size()];
 			return nameList.toArray(names);
+		}
+	   
+	   @Override
+		public String[] getEmails() {
+			List<String> emailList = new ArrayList<String>();
+			emailList.add("");
+			for(User u : users){
+				emailList.add(u.getEmail());
+			}
+			String[] emails = new String[emailList.size()];
+			return emailList.toArray(emails);
 		}
 }

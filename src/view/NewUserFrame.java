@@ -13,13 +13,16 @@ import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import controller.UserDao;
-import controller.UserDaoData;
 import model.User;
 
 import java.awt.Toolkit;
@@ -59,6 +62,7 @@ public class NewUserFrame {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	
 	private void initialize() {
 		
 		ImageIcon icon = new ImageIcon();
@@ -155,22 +159,46 @@ public class NewUserFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String name = textFieldNome.getText();
 				String email = textFieldEmail.getText();
+				if(alreadyRegistered(email)){
+					String message = "Email já cadastrado!";
+					NotificationDialog dialog = new NotificationDialog(3, message);
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setVisible(true);
+				}
 				@SuppressWarnings("deprecation")
 				String password_1 = textFieldSenha_1.getText();
 				@SuppressWarnings("deprecation")
 				String password_2 = textFieldSenha_2.getText();
-				if(password_1.equals(password_2)){
-					int id = 0;//pegar do db
-					User user = new User(id, name, email, password_1, icon, 1);
-					UserDao newUser = new UserDaoData();
+				if(password_1.equals(password_2) && !alreadyRegistered(email)){
+					User user = new User(name, email, password_1, icon, 1);
+					try {
+						FileWriter fw = new FileWriter("users.txt", true);
+						BufferedWriter bw = new BufferedWriter(fw);
+						bw.write(user.toString());
+						bw.close();
+						fw.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					try {
+						String message = "Usuario cadastrado com sucesso!\n";
+						//message += "Nome: " + user.getName();
+						NotificationDialog dialog = new NotificationDialog(2, message);
+						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					NewUserFrame.dispose();
-					newUser.addUser(user);
 				}
 				else {
-					String message = "As senhas digitadas não são iguais,\ntente novamente.";
-					NotificationDialog dialog = new NotificationDialog(3, message);
-					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					dialog.setVisible(true);
+					if(!alreadyRegistered(email)){
+						String message = "As senhas digitadas não são iguais,\ntente novamente.";
+						NotificationDialog dialog = new NotificationDialog(3, message);
+						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setVisible(true);
+					}
 				}
 				
 			}
@@ -190,5 +218,33 @@ public class NewUserFrame {
 		NewUserFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		
+	}
+	
+	public boolean alreadyRegistered(String name){
+		//List<String> emailList = new ArrayList<>();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("users.txt"));
+			StringBuilder sb = new StringBuilder();
+		    String line = br.readLine();
+		    while (line != null) {
+		    	String[] user = line.split("_");
+		    	String registeredEmail = user[3];
+		    	if(name.equals(registeredEmail)){
+		    		return true;
+		    	}
+	    		//emailList.add(registeredEmail);
+		        sb.append(line);
+		        sb.append(System.lineSeparator());
+		        line = br.readLine();
+		    }
+		    br.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		return false;
 	}
 }

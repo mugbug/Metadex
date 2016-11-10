@@ -36,8 +36,8 @@ public class AbilityDaoData implements AbilityDao{
 			  if(ability.getName().equals(a.getName())){
 				  abilities.remove(index);
 				  try {
-					  String message = "Habilidade <"+a.getName()+">\nremovida!";
-					  NotificationDialog dialog = new NotificationDialog(3, message);
+					  String message = "Habilidade '"+a.getName()+"'\nremovida!";
+					  NotificationDialog dialog = new NotificationDialog(2, message);
 					  dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					  dialog.setVisible(true);
 				  } catch (Exception e) {
@@ -103,7 +103,7 @@ public class AbilityDaoData implements AbilityDao{
 	@Override
 	public String[] getNames() {
 		List<String> nameList = new ArrayList<String>();
-		nameList.add("");
+		nameList.add(" ");
 		for(Ability a : abilities){
 			nameList.add(a.getName());
 		}

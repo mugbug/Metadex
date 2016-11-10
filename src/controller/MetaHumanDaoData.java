@@ -42,8 +42,8 @@ public class MetaHumanDaoData implements MetaHumanDao{
 			  if(metaHuman.getName().equals(mh.getName())){
 				  metaHumans.remove(index);
 				  try {
-					  String message = "Meta-humano <"+mh.getName()+">\nremovido!";
-					  NotificationDialog dialog = new NotificationDialog(3, message);
+					  String message = "Meta-humano '"+mh.getName()+"'\nremovido!";
+					  NotificationDialog dialog = new NotificationDialog(2, message);
 					  dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					  dialog.setVisible(true);
 				  } catch (Exception e) {
@@ -112,7 +112,7 @@ public class MetaHumanDaoData implements MetaHumanDao{
 	@Override
 	public String[] getNames() {
 		List<String> nameList = new ArrayList<String>();
-		nameList.add("");
+		nameList.add(" ");
 		for(MetaHuman mh : metaHumans){
 			nameList.add(mh.getName());
 		}

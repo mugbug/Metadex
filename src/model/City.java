@@ -22,5 +22,11 @@ public class City {
 		this.country = country;
 	}
 	
-	
+	@Override
+	public String toString() {
+		if(this.name == null) this.name = " ";
+		if(this.country == null) this.country = " ";
+		String data = this.name+"_"+this.country+"\n";
+		return data;
+	}
 }

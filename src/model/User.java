@@ -2,20 +2,23 @@ package model;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.ImageIcon;
 
 
 public class User {
-	private String name;
 	private int id;
+	private String name;
 	private String email;
 	private String password;
+	@SuppressWarnings("unused")
+	private List<String> contributions = new ArrayList<>();
+	private int level = 1; //1-normal user/2-admin
 	private ImageIcon image;
-	private int level = 2; //1-normal user/2-admin
-	//contributedIn list
 	
-	public User(int id, String name, String email, String password, ImageIcon image, int level) {
-		this.id = id;
+	public User(String name, String email, String password, ImageIcon image, int level) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
@@ -28,6 +31,10 @@ public class User {
 		this.password = password;
 	}
 	
+	public User(String password) {
+		this.password = password;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -65,16 +72,6 @@ public class User {
 		this.image = image;
 	}
 	
-	/*-------  Metodos  -----*/
-	
-	public void addContribution(int id){
-		//TODO
-	}
-	
-	public void getContributions(){
-		//TODO
-	}
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -106,5 +103,15 @@ public class User {
 		} else if (!email.equals(other.email))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		if(this.email == null) this.email = " ";
+		if(this.password == null) this.password = " ";
+		if(this.level != 2) this.level = 1;
+		if(this.name == null) this.name = " ";
+		String user = this.name+"_"+this.password+"_"+Integer.toString(this.level)+"_"+this.email+"\n";
+		return user;
 	}
 }
